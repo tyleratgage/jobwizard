@@ -18,6 +18,38 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 
 ---
 
+## 🚀 Next Steps (Pick Up Here)
+
+**Last Updated:** November 30, 2025
+**Current Status:** M1 ✅ | M2 ✅ | M3 🔄 (85% complete) | M4 ☐ | M5 ☐
+
+**Live URL:** https://ejd.gagedesign.com/ejd
+
+### Option A: Complete M3 Core (Recommended)
+Install Browsershot and enable PDF generation for the EJD form:
+1. Install Chromium/Puppeteer (WBS 1.1.7)
+2. Install Spatie Browsershot package (WBS 1.2.7)
+3. Integrate PDF generation (WBS 3.6.7-3.6.8)
+
+### Option B: Start Offer Letter System (M4)
+Can run in parallel with M3 - Section 4.0:
+- Migrate 6 offer letter templates from legacy `offerLetter2021` table
+- Create OfferLetterForm Livewire component
+- PDF generation (shares Browsershot with M3)
+
+### Option C: Polish & Testing
+Complete remaining items from sections 3.2-3.6:
+- Searchable job dropdown (3.3.2)
+- Keyboard navigation (3.3.7, 3.4.8)
+- Component tests (3.2.9, 3.3.9, 3.4.10, 3.5.7, 3.6.10)
+- Analytics tracking (3.3.8, 3.4.9, 3.6.9)
+
+### Option D: Accessibility Improvements
+- Physical demands table accessibility (3.5.6)
+- ARIA enhancements across all steps
+
+---
+
 ## Project Milestones Overview
 
 | Milestone | Description | Dependencies |
