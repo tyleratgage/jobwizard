@@ -1,0 +1,5 @@
+# credentials for new app located in /var/www/vhosts/gagedesign.com/ejd.gagedesign.com
+
+DB: ejd26
+U: ejd26_u
+P: TW3_Udp2o6u$hctj
