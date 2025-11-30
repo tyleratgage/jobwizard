@@ -3,7 +3,7 @@
 **Project:** Essential Job Duties (EJD) Application Rebuild
 **Version:** 1.0
 **Created:** November 29, 2025
-**Based on:** EJD_REBUILD_PLAN.md and Legacy Application Analysis
+**Based on:** EJD_REBUILD_PLAN.md and Legacy Application Analysis (/var/www/vhosts/gagedesign.com/ejd.gagedesign.com/docs/EJD_REBUILD_PLAN.md)
 
 ---
 
@@ -143,35 +143,35 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 #### 3.1 Livewire Wizard Component Architecture
 | ID | Task | Status |
 |----|------|--------|
-| 3.1.1 | Create base `EjdWizard` Livewire component | ☐ |
-| 3.1.2 | Implement step navigation logic | ☐ |
-| 3.1.3 | Implement session-based state persistence | ☐ |
-| 3.1.4 | Create progress indicator component | ☐ |
-| 3.1.5 | Implement step validation architecture | ☐ |
-| 3.1.6 | Create form state management service | ☐ |
+| 3.1.1 | Create base `EjdWizard` Livewire component | ☑ |
+| 3.1.2 | Implement step navigation logic | ☑ |
+| 3.1.3 | Implement session-based state persistence | ☑ |
+| 3.1.4 | Create progress indicator component | ☑ |
+| 3.1.5 | Implement step validation architecture | ☑ |
+| 3.1.6 | Create form state management service | ☑ |
 
 #### 3.2 Step 1: Employer & Worker Information
 | ID | Task | Status |
 |----|------|--------|
-| 3.2.1 | Create step 1 Blade view | ☐ |
-| 3.2.2 | Implement employer fields (company name, address, contact) | ☐ |
-| 3.2.3 | Implement worker fields (name, address, claim number) | ☐ |
-| 3.2.4 | Implement date fields (injury date, return to work date) | ☐ |
-| 3.2.5 | Add honeypot anti-spam field | ☐ |
-| 3.2.6 | Implement real-time validation with error messages | ☐ |
-| 3.2.7 | Style with TailwindCSS (mobile-responsive) | ☐ |
-| 3.2.8 | Add ARIA labels and keyboard navigation | ☐ |
+| 3.2.1 | Create step 1 Blade view | ☑ |
+| 3.2.2 | Implement employer fields (company name, address, contact) | ☑ |
+| 3.2.3 | Implement worker fields (name, address, claim number) | ☑ |
+| 3.2.4 | Implement date fields (injury date, return to work date) | ☑ |
+| 3.2.5 | Add honeypot anti-spam field | ☑ |
+| 3.2.6 | Implement real-time validation with error messages | ☑ |
+| 3.2.7 | Style with TailwindCSS (mobile-responsive) | ☑ |
+| 3.2.8 | Add ARIA labels and keyboard navigation | ☑ |
 | 3.2.9 | Write component tests | ☐ |
 
 #### 3.3 Step 2: Job Selection
 | ID | Task | Status |
 |----|------|--------|
-| 3.3.1 | Create step 2 Blade view | ☐ |
+| 3.3.1 | Create step 2 Blade view | ☑ |
 | 3.3.2 | Implement searchable job dropdown/list | ☐ |
-| 3.3.3 | Group jobs by location (Office, Yard, Job) | ☐ |
-| 3.3.4 | Implement single-selection logic | ☐ |
-| 3.3.5 | Display job code and name | ☐ |
-| 3.3.6 | Style with TailwindCSS (mobile-responsive) | ☐ |
+| 3.3.3 | Group jobs by location (Office, Yard, Job) | ☑ |
+| 3.3.4 | Implement single-selection logic | ☑ |
+| 3.3.5 | Display job code and name | ☑ |
+| 3.3.6 | Style with TailwindCSS (mobile-responsive) | ☑ |
 | 3.3.7 | Add keyboard navigation for list | ☐ |
 | 3.3.8 | Track job selection for analytics | ☐ |
 | 3.3.9 | Write component tests | ☐ |
@@ -179,13 +179,13 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 #### 3.4 Step 3: Task Selection
 | ID | Task | Status |
 |----|------|--------|
-| 3.4.1 | Create step 3 Blade view | ☐ |
-| 3.4.2 | Filter tasks by selected job (via job_task pivot) | ☐ |
-| 3.4.3 | Implement multi-select checkboxes | ☐ |
-| 3.4.4 | Display task name and code | ☐ |
-| 3.4.5 | Show equipment list for selected tasks | ☐ |
-| 3.4.6 | Implement "Select All" / "Clear All" functionality | ☐ |
-| 3.4.7 | Style with TailwindCSS (mobile-responsive) | ☐ |
+| 3.4.1 | Create step 3 Blade view | ☑ |
+| 3.4.2 | Filter tasks by selected job (via job_task pivot) | ☑ |
+| 3.4.3 | Implement multi-select checkboxes | ☑ |
+| 3.4.4 | Display task name and code | ☑ |
+| 3.4.5 | Show equipment list for selected tasks | ☑ |
+| 3.4.6 | Implement "Select All" / "Clear All" functionality | ☑ |
+| 3.4.7 | Style with TailwindCSS (mobile-responsive) | ☑ |
 | 3.4.8 | Add keyboard navigation for checkboxes | ☐ |
 | 3.4.9 | Track task selections for analytics | ☐ |
 | 3.4.10 | Write component tests | ☐ |
@@ -193,23 +193,23 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 #### 3.5 Step 4: Physical Demand Assessment
 | ID | Task | Status |
 |----|------|--------|
-| 3.5.1 | Create step 4 Blade view | ☐ |
-| 3.5.2 | Calculate highest frequency for each physical demand category | ☐ |
-| 3.5.3 | Display physical demand matrix/table | ☐ |
-| 3.5.4 | Show frequency labels (Never → Constant) | ☐ |
-| 3.5.5 | Style with TailwindCSS (mobile-responsive, print-friendly) | ☐ |
+| 3.5.1 | Create step 4 Blade view | ☑ |
+| 3.5.2 | Calculate highest frequency for each physical demand category | ☑ |
+| 3.5.3 | Display physical demand matrix/table | ☑ |
+| 3.5.4 | Show frequency labels (Never → Constant) | ☑ |
+| 3.5.5 | Style with TailwindCSS (mobile-responsive, print-friendly) | ☑ |
 | 3.5.6 | Make table accessible (proper headers, ARIA) | ☐ |
 | 3.5.7 | Write component tests | ☐ |
 
 #### 3.6 Step 5: Preview & Generate
 | ID | Task | Status |
 |----|------|--------|
-| 3.6.1 | Create step 5 Blade view | ☐ |
-| 3.6.2 | Display complete form summary | ☐ |
-| 3.6.3 | Implement "Edit" links to return to specific steps | ☐ |
-| 3.6.4 | Create printable form layout | ☐ |
-| 3.6.5 | Create print stylesheet | ☐ |
-| 3.6.6 | Implement browser print functionality | ☐ |
+| 3.6.1 | Create step 5 Blade view | ☑ |
+| 3.6.2 | Display complete form summary | ☑ |
+| 3.6.3 | Implement "Edit" links to return to specific steps | ☑ |
+| 3.6.4 | Create printable form layout | ☑ |
+| 3.6.5 | Create print stylesheet | ☑ |
+| 3.6.6 | Implement browser print functionality | ☑ |
 | 3.6.7 | Integrate PDF generation (Browsershot) | ☐ |
 | 3.6.8 | Add "Download PDF" button | ☐ |
 | 3.6.9 | Log form completion for analytics | ☐ |
