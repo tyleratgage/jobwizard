@@ -113,6 +113,31 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        /*
+        |--------------------------------------------------------------------------
+        | Legacy EJD Database Connection
+        |--------------------------------------------------------------------------
+        |
+        | Connection to the legacy EJD database for data migration purposes.
+        | This is used by LegacyDataSeeder to import jobs and tasks.
+        |
+        */
+        'legacy' => [
+            'driver' => 'mysql',
+            'host' => env('LEGACY_DB_HOST', '127.0.0.1'),
+            'port' => env('LEGACY_DB_PORT', '3306'),
+            'database' => env('LEGACY_DB_DATABASE', 'smaejd_db'),
+            'username' => env('LEGACY_DB_USERNAME', 'smaejd_u'),
+            'password' => env('LEGACY_DB_PASSWORD', ''),
+            'unix_socket' => env('LEGACY_DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+        ],
+
     ],
 
     /*

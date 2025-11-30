@@ -89,45 +89,52 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 #### 2.1 Schema Design
 | ID | Task | Status |
 |----|------|--------|
-| 2.1.1 | Design normalized `jobs` table schema | ☐ |
-| 2.1.2 | Design normalized `tasks` table schema (with physical demand columns) | ☐ |
-| 2.1.3 | Design `job_task` pivot table schema | ☐ |
-| 2.1.4 | Document schema changes from legacy system | ☐ |
+| 2.1.1 | Design normalized `jobs` table schema | ☑ |
+| 2.1.2 | Design normalized `tasks` table schema (with physical demand columns) | ☑ |
+| 2.1.3 | Design `job_task` pivot table schema | ☑ |
+| 2.1.4 | Document schema changes from legacy system | ☑ |
 | 2.1.5 | Create ER diagram for new schema | ☐ |
 
 #### 2.2 Laravel Migrations
 | ID | Task | Status |
 |----|------|--------|
-| 2.2.1 | Create migration for `jobs` table | ☐ |
-| 2.2.2 | Create migration for `tasks` table | ☐ |
-| 2.2.3 | Create migration for `job_task` pivot table | ☐ |
-| 2.2.4 | Create migration for `form_submissions` table (analytics) | ☐ |
-| 2.2.5 | Run migrations and verify structure | ☐ |
+| 2.2.1 | Create migration for `jobs` table | ☑ |
+| 2.2.2 | Create migration for `tasks` table | ☑ |
+| 2.2.3 | Create migration for `job_task` pivot table | ☑ |
+| 2.2.4 | Create migration for `form_submissions` table (analytics) | ☑ |
+| 2.2.5 | Run migrations and verify structure | ☑ |
 
 #### 2.3 Data Migration Scripts
 | ID | Task | Status |
 |----|------|--------|
-| 2.3.1 | Export legacy `job` table data | ☐ |
-| 2.3.2 | Create seeder/script to migrate jobs to new schema | ☐ |
-| 2.3.3 | Export legacy `task` table data | ☐ |
-| 2.3.4 | Create script to deserialize `t_jobs` arrays | ☐ |
-| 2.3.5 | Create seeder/script to migrate tasks to new schema | ☐ |
-| 2.3.6 | Create seeder/script to populate `job_task` pivot table | ☐ |
-| 2.3.7 | Verify all 63 jobs migrated correctly | ☐ |
-| 2.3.8 | Verify all tasks and relationships migrated correctly | ☐ |
-| 2.3.9 | Run data integrity tests | ☐ |
+| 2.3.1 | Export legacy `job` table data | ☑ |
+| 2.3.2 | Create seeder/script to migrate jobs to new schema | ☑ |
+| 2.3.3 | Export legacy `task` table data | ☑ |
+| 2.3.4 | Create script to deserialize `t_jobs` arrays | ☑ |
+| 2.3.5 | Create seeder/script to migrate tasks to new schema | ☑ |
+| 2.3.6 | Create seeder/script to populate `job_task` pivot table | ☑ |
+| 2.3.7 | Verify all 63 jobs migrated correctly | ☑ |
+| 2.3.8 | Verify all tasks and relationships migrated correctly | ☑ |
+| 2.3.9 | Run data integrity tests | ☑ |
 
 #### 2.4 Eloquent Models
 | ID | Task | Status |
 |----|------|--------|
-| 2.4.1 | Create `Job` model with relationships | ☐ |
-| 2.4.2 | Create `Task` model with relationships | ☐ |
-| 2.4.3 | Create `JobTask` pivot model (if needed) | ☐ |
-| 2.4.4 | Create `PhysicalDemandFrequency` enum | ☐ |
-| 2.4.5 | Create `JobLocation` enum (Office, Yard, Job) | ☐ |
-| 2.4.6 | Write model unit tests | ☐ |
+| 2.4.1 | Create `Job` model with relationships | ☑ |
+| 2.4.2 | Create `Task` model with relationships | ☑ |
+| 2.4.3 | Create `JobTask` pivot model (if needed) | ☑ |
+| 2.4.4 | Create `PhysicalDemandFrequency` enum | ☑ |
+| 2.4.5 | Create `JobLocation` enum (Office, Yard, Job) | ☑ |
+| 2.4.6 | Write model unit tests | ☑ |
 
 **🎯 Milestone M2 Deliverable:** Fully migrated database with tested Eloquent models
+
+**✅ MILESTONE M2 COMPLETE** (2025-11-30)
+- Database schema designed and migrations created (ejd_jobs, ejd_tasks, ejd_job_task, analytics tables)
+- Legacy data migrated: 55 jobs, 347 tasks, 346 job-task relationships
+- Eloquent models created with full relationships and scopes
+- PhysicalDemandFrequency and JobLocation enums implemented
+- 27 tests passing (unit and feature tests)
 
 ---
 
