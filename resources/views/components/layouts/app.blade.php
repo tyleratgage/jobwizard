@@ -57,10 +57,29 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-footer text-gray-200 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="text-center text-sm">
-                <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+    <footer class="mt-auto print:hidden">
+        <!-- Logos Row - White Background -->
+        <div class="bg-white py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-2">A service of</p>
+                        <img src="{{ asset('images/SmartLogo.png') }}" alt="SMART Logo" class="h-10 mx-auto">
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-2">In cooperation with</p>
+                        <img src="{{ asset('images/GRIPLogo.png') }}" alt="GRIP Logo" class="h-10 mx-auto">
+                    </div>
+                    <div>
+                        <img src="{{ asset('images/MBALogo.png') }}" alt="MBA Logo" class="h-10 mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Funding Text - Dark Background -->
+        <div class="bg-footer py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-sm text-gray-400">Funding and support for the SMART / MBA Return to Work grant has been provided by the State of Washington, Department of Labor and Industries, Safety and Health Investments Project.</p>
             </div>
         </div>
     </footer>
