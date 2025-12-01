@@ -21,37 +21,44 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 ## 🚀 Next Steps (Pick Up Here)
 
 **Last Updated:** November 30, 2025
-**Current Status:** M1 ✅ | M2 ✅ | M3 🔄 (85% complete) | M4 🔄 (75% complete) | M5 ☐
+**Current Status:** M1 ✅ | M2 ✅ | M3 ✅ (Single-page form complete) | M4 🔄 (75% complete) | M5 ☐
 
 **Live URLs:**
-- EJD Form: https://ejd.gagedesign.com/ejd
+- EJD Form (Legacy Wizard): https://ejd.gagedesign.com/ejd
+- EJD Form (New Single-Page): https://ejd.gagedesign.com/ejd-new
 - Offer Letter: https://ejd.gagedesign.com/offer-letter
 
-### Option A: Complete M4 Offer Letter System (Current)
+**Architecture Change:** Per Change Order #001 (implemented), the EJD form was rebuilt as a single-page reactive form instead of a 5-step wizard. See `docs/legacy_templates/CHANGE_ORDER_001.md` for details.
+
+### Option A: Finalize EJD Form Cutover
+The new single-page EJD form at `/ejd-new` is ready for review. Next steps:
+1. Review and test at `/ejd-new`
+2. Make any final adjustments
+3. Switch `/ejd` route to use `EjdForm` component
+4. Archive/delete wizard files
+
+### Option B: Complete M4 Offer Letter System
 Template migration and form complete (4.1.1-4.1.8, 4.2.1-4.2.12). Next steps:
 1. Write component tests (4.2.13)
-2. PDF generation service (4.3.1-4.3.10) - shares Browsershot with M3
+2. PDF generation service (4.3.1-4.3.10) - shares Browsershot with EJD
 
-### Option B: Install Browsershot (Enables PDF for both M3 & M4)
-Install Browsershot and enable PDF generation for both forms:
+### Option C: Install Browsershot (Enables PDF for both forms)
+Install Browsershot and enable PDF generation:
 1. Install Chromium/Puppeteer (WBS 1.1.7)
 2. Install Spatie Browsershot package (WBS 1.2.7)
-3. Integrate PDF generation (WBS 3.6.7-3.6.8, 4.3.1-4.3.10)
+3. Integrate PDF generation (WBS 3.5.1-3.5.4, 4.3.1-4.3.10)
 
-### Option C: Polish & Testing
-Complete remaining items from sections 3.2-3.6:
-- Searchable job dropdown (3.3.2)
-- Keyboard navigation (3.3.7, 3.4.8)
-- Component tests (3.2.9, 3.3.9, 3.4.10, 3.5.7, 3.6.10)
-- Analytics tracking (3.3.8, 3.4.9, 3.6.9)
+### Option D: Polish & Testing
+- Searchable job dropdown (3.2.2)
+- Keyboard navigation enhancements (3.2.6)
+- Component tests (3.4.1-3.4.3)
+- Analytics tracking (3.4.4-3.4.5)
 
-### Option D: Accessibility Improvements
-- Physical demands table accessibility (3.5.6)
-- ARIA enhancements across all steps
-
-### Recent UX Improvements (Completed)
+### Recent Milestones Completed
+- ✅ **Change Order #001 Implemented**: Single-page EJD form replaces 5-step wizard
 - ✅ Phone number auto-formatting on EJD and Offer Letter forms
 - ✅ Accessibility features added to Offer Letter form (4.2.12)
+- ✅ Reactive form with location→jobs→tasks→demands cascade
 
 ---
 
@@ -175,84 +182,84 @@ Complete remaining items from sections 3.2-3.6:
 
 ---
 
-### 3.0 EJD Multi-Step Form
+### 3.0 EJD Single-Page Form
 
-#### 3.1 Livewire Wizard Component Architecture
+> **Architecture Change (CO #001):** Replaced the 5-step wizard with a single-page reactive form matching the legacy field structure. See `docs/legacy_templates/CHANGE_ORDER_001.md`.
+
+#### 3.1 Single-Page Form Component
 | ID | Task | Status |
 |----|------|--------|
-| 3.1.1 | Create base `EjdWizard` Livewire component | ☑ |
-| 3.1.2 | Implement step navigation logic | ☑ |
-| 3.1.3 | Implement session-based state persistence | ☑ |
-| 3.1.4 | Create progress indicator component | ☑ |
-| 3.1.5 | Implement step validation architecture | ☑ |
-| 3.1.6 | Create form state management service | ☑ |
+| 3.1.1 | Create `EjdForm` Livewire component | ☑ |
+| 3.1.2 | Implement reactive dependencies (location→jobs→tasks→demands) | ☑ |
+| 3.1.3 | Match legacy field structure (12 core fields) | ☑ |
+| 3.1.4 | Implement physical demand calculation (ceiling of average) | ☑ |
+| 3.1.5 | Create single-page Blade view with all sections | ☑ |
+| 3.1.6 | Add honeypot anti-spam field | ☑ |
 
-#### 3.2 Step 1: Employer & Worker Information
+#### 3.2 Form Sections Implementation
 | ID | Task | Status |
 |----|------|--------|
-| 3.2.1 | Create step 1 Blade view | ☑ |
-| 3.2.2 | Implement employer fields (company name, address, contact) | ☑ |
-| 3.2.3 | Implement worker fields (name, address, claim number) | ☑ |
-| 3.2.4 | Implement date fields (injury date, return to work date) | ☑ |
-| 3.2.5 | Add honeypot anti-spam field | ☑ |
-| 3.2.6 | Implement real-time validation with error messages | ☑ |
-| 3.2.7 | Style with TailwindCSS (mobile-responsive) | ☑ |
-| 3.2.8 | Add ARIA labels and keyboard navigation | ☑ |
-| 3.2.9 | Write component tests | ☐ |
+| 3.2.1 | Section 1: Basic Info (employer, phone, title, worker, claim#, date) | ☑ |
+| 3.2.2 | Section 2: Job Details (location radios, hours/days selects) | ☑ |
+| 3.2.3 | Section 3: Job Selection (multi-select, filtered by location) | ☑ |
+| 3.2.4 | Section 4: Tasks (multi-select, filtered by jobs, equipment auto-populate) | ☑ |
+| 3.2.5 | Section 5: Physical Demands (17 categories + 3 lifting with lbs) | ☑ |
+| 3.2.6 | Implement Select All / Clear All for tasks | ☑ |
+| 3.2.7 | Phone number auto-formatting (xxx-xxx-xxxx) | ☑ |
+| 3.2.8 | Style with TailwindCSS (mobile-responsive) | ☑ |
+| 3.2.9 | Add searchable job dropdown | ☐ |
+| 3.2.10 | Add keyboard navigation enhancements | ☐ |
 
-#### 3.3 Step 2: Job Selection
+#### 3.3 Validation & State
 | ID | Task | Status |
 |----|------|--------|
-| 3.3.1 | Create step 2 Blade view | ☑ |
-| 3.3.2 | Implement searchable job dropdown/list | ☐ |
-| 3.3.3 | Group jobs by location (Office, Yard, Job) | ☑ |
-| 3.3.4 | Implement single-selection logic | ☑ |
-| 3.3.5 | Display job code and name | ☑ |
-| 3.3.6 | Style with TailwindCSS (mobile-responsive) | ☑ |
-| 3.3.7 | Add keyboard navigation for list | ☐ |
-| 3.3.8 | Track job selection for analytics | ☐ |
-| 3.3.9 | Write component tests | ☐ |
+| 3.3.1 | Implement real-time validation | ☑ |
+| 3.3.2 | Required field validation with custom messages | ☑ |
+| 3.3.3 | Conditional lbs validation (required when frequency > Never) | ☑ |
+| 3.3.4 | Cascade clearing on dependency change | ☑ |
 
-#### 3.4 Step 3: Task Selection
+#### 3.4 Preview & Output
 | ID | Task | Status |
 |----|------|--------|
-| 3.4.1 | Create step 3 Blade view | ☑ |
-| 3.4.2 | Filter tasks by selected job (via job_task pivot) | ☑ |
-| 3.4.3 | Implement multi-select checkboxes | ☑ |
-| 3.4.4 | Display task name and code | ☑ |
-| 3.4.5 | Show equipment list for selected tasks | ☑ |
-| 3.4.6 | Implement "Select All" / "Clear All" functionality | ☑ |
-| 3.4.7 | Style with TailwindCSS (mobile-responsive) | ☑ |
-| 3.4.8 | Add keyboard navigation for checkboxes | ☐ |
-| 3.4.9 | Track task selections for analytics | ☐ |
-| 3.4.10 | Write component tests | ☐ |
+| 3.4.1 | Create preview mode toggle | ☑ |
+| 3.4.2 | Create printable form layout (matching legacy) | ☑ |
+| 3.4.3 | Implement browser print functionality | ☑ |
+| 3.4.4 | Create print stylesheet | ☑ |
+| 3.4.5 | Add "Edit Form" button from preview | ☑ |
 
-#### 3.5 Step 4: Physical Demand Assessment
+#### 3.5 PDF Generation (Pending Browsershot)
 | ID | Task | Status |
 |----|------|--------|
-| 3.5.1 | Create step 4 Blade view | ☑ |
-| 3.5.2 | Calculate highest frequency for each physical demand category | ☑ |
-| 3.5.3 | Display physical demand matrix/table | ☑ |
-| 3.5.4 | Show frequency labels (Never → Constant) | ☑ |
-| 3.5.5 | Style with TailwindCSS (mobile-responsive, print-friendly) | ☑ |
-| 3.5.6 | Make table accessible (proper headers, ARIA) | ☐ |
-| 3.5.7 | Write component tests | ☐ |
+| 3.5.1 | Create `EjdPdfService` class | ☐ |
+| 3.5.2 | Configure Browsershot for PDF generation | ☐ |
+| 3.5.3 | Add "Download PDF" button | ☐ |
+| 3.5.4 | Test PDF output quality | ☐ |
 
-#### 3.6 Step 5: Preview & Generate
+#### 3.6 Testing & Analytics
 | ID | Task | Status |
 |----|------|--------|
-| 3.6.1 | Create step 5 Blade view | ☑ |
-| 3.6.2 | Display complete form summary | ☑ |
-| 3.6.3 | Implement "Edit" links to return to specific steps | ☑ |
-| 3.6.4 | Create printable form layout | ☑ |
-| 3.6.5 | Create print stylesheet | ☑ |
-| 3.6.6 | Implement browser print functionality | ☑ |
-| 3.6.7 | Integrate PDF generation (Browsershot) | ☐ |
-| 3.6.8 | Add "Download PDF" button | ☐ |
-| 3.6.9 | Log form completion for analytics | ☐ |
-| 3.6.10 | Write integration tests | ☐ |
+| 3.6.1 | Write component tests | ☐ |
+| 3.6.2 | Write integration tests | ☐ |
+| 3.6.3 | Log form completion for analytics | ☐ |
 
-**🎯 Milestone M3 Deliverable:** Fully functional EJD multi-step form with validation and PDF output
+#### 3.7 Cutover Tasks
+| ID | Task | Status |
+|----|------|--------|
+| 3.7.1 | Final review of `/ejd-new` form | ☐ |
+| 3.7.2 | Switch `/ejd` route to `EjdForm` component | ☐ |
+| 3.7.3 | Archive wizard files to `docs/legacy_templates/` | ☐ |
+| 3.7.4 | Delete `EjdWizard` component and related files | ☐ |
+| 3.7.5 | Update tests to use new component | ☐ |
+
+**🎯 Milestone M3 Deliverable:** Fully functional single-page EJD form with validation and PDF output
+
+**✅ MILESTONE M3 CORE COMPLETE** (2025-11-30)
+- Single-page reactive form implemented (`EjdForm.php`)
+- All 5 sections matching legacy field structure
+- Reactive cascade: location → jobs → tasks → equipment → physical demands
+- Physical demand calculation using ceiling of average (legacy logic)
+- Print functionality working
+- PDF generation pending Browsershot installation
 
 ---
 
@@ -576,10 +583,12 @@ Complete remaining items from sections 3.2-3.6:
 
 | Category | Count |
 |----------|-------|
-| **Phase 1 Tasks** | 107 |
+| **Phase 1 Tasks** | ~95 |
 | **Phase 2 Tasks** | 58 |
-| **Total Tasks** | 165 |
+| **Total Tasks** | ~153 |
 | **Milestones** | 9 |
+
+> *Note: Task count updated after Change Order #001 (wizard→single-page form)*
 
 ---
 

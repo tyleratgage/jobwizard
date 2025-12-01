@@ -1,15 +1,23 @@
 {{-- Section 4: Tasks --}}
-<div class="bg-white shadow-sm rounded-lg overflow-hidden" wire:key="tasks-{{ implode('-', $jobTitle) }}">
-    <div class="bg-ejd-400 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
-            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
+<div class="bg-white shadow-sm rounded-lg overflow-hidden {{ count($jobTitle) === 0 ? 'opacity-60' : '' }}" wire:key="tasks-{{ implode('-', $jobTitle) }}">
+    <div class="bg-slate-200 px-6 py-4">
+        <h2 class="text-xl font-semibold text-slate-800 flex items-center">
+            <span class="bg-white text-slate-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3 shadow-sm">4</span>
             Tasks
         </h2>
-        <p class="text-ejd-700 text-shadow-dark text-sm mt-1">Check or uncheck tasks as needed</p>
+        <p class="text-slate-600 text-sm mt-1">Check or uncheck tasks as needed</p>
     </div>
 
     <div class="p-6">
-        @if($this->availableTasks->isEmpty())
+        @if(count($jobTitle) === 0)
+            {{-- Placeholder when no job selected --}}
+            <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <p class="mt-2 text-gray-500">Select a job title above to see available tasks</p>
+            </div>
+        @elseif($this->availableTasks->isEmpty())
             <p class="text-gray-500 text-center py-4">No tasks available for the selected job(s).</p>
         @else
             {{-- Select All / Clear All buttons --}}
