@@ -28,10 +28,9 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 - Offer Letter: https://ejd.gagedesign.com/offer-letter
 
 ### Option A: Complete M4 Offer Letter System (Current)
-Template migration and form complete (4.1.1-4.1.8, 4.2.1-4.2.11). Next steps:
-1. Add accessibility features (4.2.12)
-2. Write component tests (4.2.13)
-3. PDF generation service (4.3.1-4.3.10) - shares Browsershot with M3
+Template migration and form complete (4.1.1-4.1.8, 4.2.1-4.2.12). Next steps:
+1. Write component tests (4.2.13)
+2. PDF generation service (4.3.1-4.3.10) - shares Browsershot with M3
 
 ### Option B: Install Browsershot (Enables PDF for both M3 & M4)
 Install Browsershot and enable PDF generation for both forms:
@@ -282,7 +281,7 @@ Complete remaining items from sections 3.2-3.6:
 | 4.2.9 | Implement CC recipients field | ☑ |
 | 4.2.10 | Add real-time validation | ☑ |
 | 4.2.11 | Style with TailwindCSS (mobile-responsive) | ☑ |
-| 4.2.12 | Add accessibility features | ☐ |
+| 4.2.12 | Add accessibility features | ☑ |
 | 4.2.13 | Write component tests | ☐ |
 
 #### 4.3 PDF Generation Service

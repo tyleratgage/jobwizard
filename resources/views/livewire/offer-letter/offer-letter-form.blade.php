@@ -1,22 +1,43 @@
 <div class="space-y-6">
+    {{-- Skip Link for Keyboard Users --}}
+    <a
+        href="#main-form"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+    >
+        Skip to main form
+    </a>
+
+    {{-- Live Region for Screen Reader Announcements --}}
+    <div
+        id="form-announcements"
+        class="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
     {{-- Page Header --}}
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <header class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h1 class="text-2xl font-bold text-gray-900">Return to Work Offer Letter</h1>
         <p class="mt-2 text-gray-600">Generate an offer letter for an injured worker returning to work. Available in English, Spanish, and Russian.</p>
-    </div>
+        <p class="mt-1 text-sm text-gray-500">
+            <span class="text-red-500" aria-hidden="true">*</span>
+            <span class="sr-only">Asterisk</span> indicates required field
+        </p>
+    </header>
 
     @if($showPreview)
         {{-- Letter Preview --}}
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <main id="main-form" role="main" aria-label="Letter preview" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-semibold text-gray-900">Letter Preview</h2>
-                <div class="flex gap-3">
+                <div class="flex gap-3" role="group" aria-label="Preview actions">
                     <button
                         type="button"
                         wire:click="backToForm"
                         class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     >
-                        Edit Form
+                        <span aria-hidden="true">&larr;</span> Edit Form
                     </button>
                     <button
                         type="button"
@@ -29,57 +50,89 @@
             </div>
 
             {{-- Print Notice --}}
-            <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md text-amber-800 text-sm print:hidden">
+            <div role="alert" class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md text-amber-800 text-sm print:hidden">
                 <strong>Note:</strong> A legal offer requires personal or certified mail delivery.
             </div>
 
             {{-- Letter Content --}}
-            <div class="prose max-w-none border border-gray-200 rounded-lg p-8 bg-white print:border-none print:p-0">
+            <article class="prose max-w-none border border-gray-200 rounded-lg p-8 bg-white print:border-none print:p-0" aria-label="Generated offer letter">
                 @include($this->templateName, $this->templateData)
-            </div>
-        </div>
+            </article>
+        </main>
     @else
         {{-- Form --}}
-        <form wire:submit="generatePreview" class="space-y-6">
+        <form
+            wire:submit="generatePreview"
+            id="main-form"
+            role="form"
+            aria-label="Return to Work Offer Letter form"
+            class="space-y-6"
+            novalidate
+        >
+            {{-- Error Summary (appears when there are validation errors) --}}
+            @if($errors->any())
+                <div
+                    role="alert"
+                    aria-labelledby="error-summary-heading"
+                    class="bg-red-50 border border-red-200 rounded-lg p-4"
+                >
+                    <h2 id="error-summary-heading" class="text-red-800 font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Please correct the following errors:
+                    </h2>
+                    <ul class="mt-2 list-disc list-inside text-sm text-red-700 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             {{-- Honeypot --}}
             <div class="hidden" aria-hidden="true">
                 <input type="text" name="honeypot" wire:model="honeypot" tabindex="-1" autocomplete="off">
             </div>
 
             {{-- Letter Type & Language Selection --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Letter Options</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="letter-options-heading">
+                <h2 id="letter-options-heading" class="text-lg font-semibold text-gray-900 mb-4">Letter Options</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Job Type --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <span class="text-red-500">*</span> Job Type
-                        </label>
-                        <div class="space-y-2">
+                    <fieldset>
+                        <legend class="block text-sm font-medium text-gray-700 mb-2">
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Job Type
+                        </legend>
+                        <div class="space-y-2" role="radiogroup" aria-required="true">
                             @foreach(self::JOB_TYPES as $value => $label)
                                 <label class="flex items-center gap-3 cursor-pointer">
                                     <input
                                         type="radio"
                                         name="jobType"
+                                        id="jobType-{{ $value }}"
                                         value="{{ $value }}"
                                         wire:model="jobType"
-                                        class="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                                        class="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500 focus:ring-2"
                                     >
                                     <span class="text-gray-900">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
-                    </div>
+                    </fieldset>
 
                     {{-- Language --}}
                     <div>
                         <label for="language" class="block text-sm font-medium text-gray-700 mb-2">
-                            <span class="text-red-500">*</span> Letter Language
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Letter Language
                         </label>
                         <select
                             id="language"
                             wire:model="language"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            aria-required="true"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                             @foreach(self::LANGUAGES as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
@@ -87,114 +140,144 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Worker Information --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Injured Worker's Information</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="worker-info-heading">
+                <h2 id="worker-info-heading" class="text-lg font-semibold text-gray-900 mb-4">Injured Worker's Information</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- First Name --}}
                     <div>
                         <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> First Name
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> First Name
                         </label>
                         <input
                             type="text"
                             id="firstName"
                             wire:model="firstName"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('firstName') border-red-500 @enderror"
+                            autocomplete="given-name"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('firstName') ? 'true' : 'false' }}"
+                            @if($errors->has('firstName')) aria-describedby="firstName-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('firstName') border-red-500 @enderror"
                         >
                         @error('firstName')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="firstName-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Last Name --}}
                     <div>
                         <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Last Name
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Last Name
                         </label>
                         <input
                             type="text"
                             id="lastName"
                             wire:model="lastName"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('lastName') border-red-500 @enderror"
+                            autocomplete="family-name"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('lastName') ? 'true' : 'false' }}"
+                            @if($errors->has('lastName')) aria-describedby="lastName-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('lastName') border-red-500 @enderror"
                         >
                         @error('lastName')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="lastName-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- L&I Claim Number --}}
                     <div>
                         <label for="claimNo" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> L & I Claim #
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> L & I Claim #
                         </label>
                         <input
                             type="text"
                             id="claimNo"
                             wire:model="claimNo"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('claimNo') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('claimNo') ? 'true' : 'false' }}"
+                            @if($errors->has('claimNo')) aria-describedby="claimNo-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('claimNo') border-red-500 @enderror"
                         >
                         @error('claimNo')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="claimNo-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Address 1 --}}
                     <div>
                         <label for="addressOne" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Address 1
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Address 1
                         </label>
                         <input
                             type="text"
                             id="addressOne"
                             wire:model="addressOne"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('addressOne') border-red-500 @enderror"
+                            autocomplete="address-line1"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('addressOne') ? 'true' : 'false' }}"
+                            @if($errors->has('addressOne')) aria-describedby="addressOne-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('addressOne') border-red-500 @enderror"
                         >
                         @error('addressOne')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="addressOne-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Address 2 --}}
                     <div>
                         <label for="addressTwo" class="block text-sm font-medium text-gray-700 mb-1">
-                            Address 2
+                            Address 2 <span class="text-gray-500">(optional)</span>
                         </label>
                         <input
                             type="text"
                             id="addressTwo"
                             wire:model="addressTwo"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            autocomplete="address-line2"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                     </div>
 
                     {{-- City --}}
                     <div>
                         <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> City
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> City
                         </label>
                         <input
                             type="text"
                             id="city"
                             wire:model="city"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('city') border-red-500 @enderror"
+                            autocomplete="address-level2"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('city') ? 'true' : 'false' }}"
+                            @if($errors->has('city')) aria-describedby="city-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('city') border-red-500 @enderror"
                         >
                         @error('city')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="city-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- State --}}
                     <div>
                         <label for="state" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> State
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> State
                         </label>
                         <select
                             id="state"
                             wire:model="state"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('state') border-red-500 @enderror"
+                            autocomplete="address-level1"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('state') ? 'true' : 'false' }}"
+                            @if($errors->has('state')) aria-describedby="state-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('state') border-red-500 @enderror"
                         >
                             <option value="">Select State</option>
                             @foreach(self::STATES as $abbr => $name)
@@ -202,107 +285,130 @@
                             @endforeach
                         </select>
                         @error('state')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="state-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- ZIP --}}
                     <div>
                         <label for="zip" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> ZIP Code
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> ZIP Code
                         </label>
                         <input
                             type="text"
                             id="zip"
                             wire:model="zip"
                             maxlength="10"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('zip') border-red-500 @enderror"
+                            autocomplete="postal-code"
+                            inputmode="numeric"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('zip') ? 'true' : 'false' }}"
+                            @if($errors->has('zip')) aria-describedby="zip-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('zip') border-red-500 @enderror"
                         >
                         @error('zip')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="zip-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Dates --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Dates</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="dates-heading">
+                <h2 id="dates-heading" class="text-lg font-semibold text-gray-900 mb-4">Dates</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Doctor's Approval Date --}}
                     <div>
                         <label for="drApprovalDate" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Doctor's Approval Date
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Doctor's Approval Date
                         </label>
                         <input
                             type="date"
                             id="drApprovalDate"
                             wire:model="drApprovalDate"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('drApprovalDate') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('drApprovalDate') ? 'true' : 'false' }}"
+                            @if($errors->has('drApprovalDate')) aria-describedby="drApprovalDate-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('drApprovalDate') border-red-500 @enderror"
                         >
                         @error('drApprovalDate')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="drApprovalDate-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Report to Work Date --}}
                     <div>
                         <label for="workDate" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Report to Work Date
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Report to Work Date
                         </label>
                         <input
                             type="date"
                             id="workDate"
                             wire:model="workDate"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('workDate') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('workDate') ? 'true' : 'false' }}"
+                            @if($errors->has('workDate')) aria-describedby="workDate-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('workDate') border-red-500 @enderror"
                         >
                         @error('workDate')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="workDate-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Working Hours and Days --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Working Hours and Days</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="hours-days-heading">
+                <h2 id="hours-days-heading" class="text-lg font-semibold text-gray-900 mb-4">Working Hours and Days</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Start Time --}}
                     <div>
                         <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Start Time
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Start Time
                         </label>
                         <input
                             type="time"
                             id="startTime"
                             wire:model="startTime"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('startTime') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('startTime') ? 'true' : 'false' }}"
+                            @if($errors->has('startTime')) aria-describedby="startTime-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('startTime') border-red-500 @enderror"
                         >
                         @error('startTime')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="startTime-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- End Time --}}
                     <div>
                         <label for="endTime" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> End Time
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> End Time
                         </label>
                         <input
                             type="time"
                             id="endTime"
                             wire:model="endTime"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('endTime') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('endTime') ? 'true' : 'false' }}"
+                            @if($errors->has('endTime')) aria-describedby="endTime-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('endTime') border-red-500 @enderror"
                         >
                         @error('endTime')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="endTime-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Hours Per Week --}}
                     <div>
                         <label for="hoursPerWeek" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Hours Per Week
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Hours Per Week
                         </label>
                         <input
                             type="number"
@@ -310,71 +416,86 @@
                             wire:model="hoursPerWeek"
                             min="1"
                             max="168"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('hoursPerWeek') border-red-500 @enderror"
+                            inputmode="numeric"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('hoursPerWeek') ? 'true' : 'false' }}"
+                            @if($errors->has('hoursPerWeek')) aria-describedby="hoursPerWeek-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('hoursPerWeek') border-red-500 @enderror"
                         >
                         @error('hoursPerWeek')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="hoursPerWeek-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Days of the Week --}}
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <span class="text-red-500">*</span> Days of the Week
-                        </label>
-                        <div class="flex flex-wrap gap-4">
+                    <fieldset class="md:col-span-2">
+                        <legend class="block text-sm font-medium text-gray-700 mb-2">
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Days of the Week
+                            <span class="sr-only">(select at least one)</span>
+                        </legend>
+                        <div class="flex flex-wrap gap-4" role="group" aria-required="true">
                             @foreach(self::DAYS_OF_WEEK as $day)
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="checkbox"
+                                        id="day-{{ Str::slug($day) }}"
                                         value="{{ $day }}"
                                         wire:model="daysOfTheWeek"
-                                        class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                                        class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
                                     >
                                     <span class="text-gray-900">{{ $day }}</span>
                                 </label>
                             @endforeach
                         </div>
                         @error('daysOfTheWeek')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="daysOfTheWeek-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </fieldset>
                 </div>
-            </div>
+            </section>
 
             {{-- Wages --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Wages</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="wages-heading">
+                <h2 id="wages-heading" class="text-lg font-semibold text-gray-900 mb-4">Wages</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Dollar Amount --}}
                     <div>
                         <label for="wage" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Dollar Amount
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Dollar Amount
                         </label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true">$</span>
                             <input
                                 type="text"
                                 id="wage"
                                 wire:model="wage"
                                 placeholder="0.00"
-                                class="w-full pl-8 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('wage') border-red-500 @enderror"
+                                inputmode="decimal"
+                                aria-required="true"
+                                aria-invalid="{{ $errors->has('wage') ? 'true' : 'false' }}"
+                                aria-describedby="wage-prefix{{ $errors->has('wage') ? ' wage-error' : '' }}"
+                                class="w-full pl-8 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('wage') border-red-500 @enderror"
                             >
+                            <span id="wage-prefix" class="sr-only">Dollar amount in USD</span>
                         </div>
                         @error('wage')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="wage-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Per --}}
                     <div>
                         <label for="wageDuration" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Per
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Per
                         </label>
                         <select
                             id="wageDuration"
                             wire:model="wageDuration"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            aria-required="true"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                             @foreach(self::WAGE_DURATIONS as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
@@ -382,53 +503,65 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Work Location --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Work Location</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="work-location-heading">
+                <h2 id="work-location-heading" class="text-lg font-semibold text-gray-900 mb-4">Work Location</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Location Address --}}
                     <div>
                         <label for="locationAddress" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Location Address
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Location Address
                         </label>
                         <input
                             type="text"
                             id="locationAddress"
                             wire:model="locationAddress"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('locationAddress') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('locationAddress') ? 'true' : 'false' }}"
+                            @if($errors->has('locationAddress')) aria-describedby="locationAddress-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('locationAddress') border-red-500 @enderror"
                         >
                         @error('locationAddress')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="locationAddress-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Location City --}}
                     <div>
                         <label for="locationCity" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Location City
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Location City
                         </label>
                         <input
                             type="text"
                             id="locationCity"
                             wire:model="locationCity"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('locationCity') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('locationCity') ? 'true' : 'false' }}"
+                            @if($errors->has('locationCity')) aria-describedby="locationCity-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('locationCity') border-red-500 @enderror"
                         >
                         @error('locationCity')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="locationCity-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Location State --}}
                     <div>
                         <label for="locationState" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Location State
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Location State
                         </label>
                         <select
                             id="locationState"
                             wire:model="locationState"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('locationState') border-red-500 @enderror"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('locationState') ? 'true' : 'false' }}"
+                            @if($errors->has('locationState')) aria-describedby="locationState-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('locationState') border-red-500 @enderror"
                         >
                             <option value="">Select State</option>
                             @foreach(self::STATES as $abbr => $name)
@@ -436,161 +569,186 @@
                             @endforeach
                         </select>
                         @error('locationState')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="locationState-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Location ZIP --}}
                     <div>
                         <label for="locationZip" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Location ZIP Code
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Location ZIP Code
                         </label>
                         <input
                             type="text"
                             id="locationZip"
                             wire:model="locationZip"
                             maxlength="10"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('locationZip') border-red-500 @enderror"
+                            inputmode="numeric"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('locationZip') ? 'true' : 'false' }}"
+                            @if($errors->has('locationZip')) aria-describedby="locationZip-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('locationZip') border-red-500 @enderror"
                         >
                         @error('locationZip')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="locationZip-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Supervisor/Contact Information --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Supervisor & Contact Information</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="supervisor-heading">
+                <h2 id="supervisor-heading" class="text-lg font-semibold text-gray-900 mb-4">Supervisor & Contact Information</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Supervisor Name --}}
                     <div>
                         <label for="supervisorName" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Supervisor Name
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Supervisor Name
                         </label>
                         <input
                             type="text"
                             id="supervisorName"
                             wire:model="supervisorName"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('supervisorName') border-red-500 @enderror"
+                            autocomplete="name"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('supervisorName') ? 'true' : 'false' }}"
+                            @if($errors->has('supervisorName')) aria-describedby="supervisorName-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('supervisorName') border-red-500 @enderror"
                         >
                         @error('supervisorName')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="supervisorName-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Supervisor Phone --}}
                     <div>
                         <label for="supervisorPhone" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Supervisor Phone #
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Supervisor Phone #
                         </label>
                         <input
                             type="tel"
                             id="supervisorPhone"
                             wire:model="supervisorPhone"
                             placeholder="(xxx) xxx-xxxx"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('supervisorPhone') border-red-500 @enderror"
+                            autocomplete="tel"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('supervisorPhone') ? 'true' : 'false' }}"
+                            @if($errors->has('supervisorPhone')) aria-describedby="supervisorPhone-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('supervisorPhone') border-red-500 @enderror"
                         >
                         @error('supervisorPhone')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="supervisorPhone-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Contact Phone --}}
                     <div>
                         <label for="contactPhone" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Contact Phone #
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Contact Phone #
                         </label>
                         <input
                             type="tel"
                             id="contactPhone"
                             wire:model="contactPhone"
                             placeholder="(xxx) xxx-xxxx"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('contactPhone') border-red-500 @enderror"
+                            autocomplete="tel"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('contactPhone') ? 'true' : 'false' }}"
+                            @if($errors->has('contactPhone')) aria-describedby="contactPhone-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('contactPhone') border-red-500 @enderror"
                         >
                         @error('contactPhone')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="contactPhone-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Your Name (Valediction) --}}
                     <div>
                         <label for="valediction" class="block text-sm font-medium text-gray-700 mb-1">
-                            <span class="text-red-500">*</span> Your Name (for signature)
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                            <span class="sr-only">Required:</span> Your Name (for signature)
                         </label>
                         <input
                             type="text"
                             id="valediction"
                             wire:model="valediction"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('valediction') border-red-500 @enderror"
+                            autocomplete="name"
+                            aria-required="true"
+                            aria-invalid="{{ $errors->has('valediction') ? 'true' : 'false' }}"
+                            @if($errors->has('valediction')) aria-describedby="valediction-error" @endif
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('valediction') border-red-500 @enderror"
                         >
                         @error('valediction')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p id="valediction-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- CC Recipients --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Cc (Optional)</h2>
+            <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" aria-labelledby="cc-heading">
+                <h2 id="cc-heading" class="text-lg font-semibold text-gray-900 mb-4">Cc (Optional)</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {{-- CC Line 1 --}}
                     <div>
                         <label for="ccLine1" class="block text-sm font-medium text-gray-700 mb-1">
-                            Cc Line 1
+                            Cc Line 1 <span class="text-gray-500">(optional)</span>
                         </label>
                         <input
                             type="text"
                             id="ccLine1"
                             wire:model="ccLine1"
                             placeholder="Claim's Manager w/encl."
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                     </div>
 
                     {{-- CC Line 2 --}}
                     <div>
                         <label for="ccLine2" class="block text-sm font-medium text-gray-700 mb-1">
-                            Cc Line 2
+                            Cc Line 2 <span class="text-gray-500">(optional)</span>
                         </label>
                         <input
                             type="text"
                             id="ccLine2"
                             wire:model="ccLine2"
                             placeholder="Physician w/encl."
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                     </div>
 
                     {{-- CC Line 3 --}}
                     <div>
                         <label for="ccLine3" class="block text-sm font-medium text-gray-700 mb-1">
-                            Cc Line 3
+                            Cc Line 3 <span class="text-gray-500">(optional)</span>
                         </label>
                         <input
                             type="text"
                             id="ccLine3"
                             wire:model="ccLine3"
                             placeholder="Additional cc"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2"
                         >
                     </div>
                 </div>
-            </div>
+            </section>
 
             {{-- Form Actions --}}
-            <div class="flex justify-end gap-4">
+            <div class="flex justify-end gap-4" role="group" aria-label="Form actions">
                 <button
                     type="button"
                     wire:click="resetForm"
-                    class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                 >
                     Reset Form
                 </button>
                 <button
                     type="submit"
-                    class="px-6 py-2 text-white bg-primary-600 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    class="px-6 py-2 text-white bg-primary-600 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                 >
                     Generate Letter
                 </button>
@@ -598,8 +756,34 @@
         </form>
     @endif
 
-    {{-- Print Styles --}}
+    {{-- Print Styles and Accessibility Enhancements --}}
     <style>
+        /* Enhanced focus styles for accessibility */
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible,
+        [type="checkbox"]:focus-visible,
+        [type="radio"]:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* High contrast focus for checkboxes and radios */
+        [type="checkbox"]:focus-visible + span,
+        [type="radio"]:focus-visible + span {
+            text-decoration: underline;
+        }
+
+        /* Reduce motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print styles */
         @media print {
             header, footer, .print\:hidden {
                 display: none !important;
@@ -627,4 +811,41 @@
             padding-left: 0;
         }
     </style>
+
+    {{-- Keyboard Navigation Enhancement Script --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Announce errors to screen readers when form is submitted
+            const form = document.getElementById('main-form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    setTimeout(function() {
+                        const errorSummary = document.querySelector('[role="alert"]');
+                        if (errorSummary) {
+                            const announcements = document.getElementById('form-announcements');
+                            if (announcements) {
+                                const errorCount = document.querySelectorAll('[role="alert"]').length;
+                                announcements.textContent = 'Form has ' + errorCount + ' error(s). Please review and correct.';
+                            }
+                            // Focus on first error field
+                            const firstError = document.querySelector('[aria-invalid="true"]');
+                            if (firstError) {
+                                firstError.focus();
+                            }
+                        }
+                    }, 100);
+                });
+            }
+
+            // Escape key to close preview and return to form
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const backButton = document.querySelector('[wire\\:click="backToForm"]');
+                    if (backButton) {
+                        backButton.click();
+                    }
+                }
+            });
+        });
+    </script>
 </div>
