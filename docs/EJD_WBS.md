@@ -49,6 +49,10 @@ Complete remaining items from sections 3.2-3.6:
 - Physical demands table accessibility (3.5.6)
 - ARIA enhancements across all steps
 
+### Recent UX Improvements (Completed)
+- ✅ Phone number auto-formatting on EJD and Offer Letter forms
+- ✅ Accessibility features added to Offer Letter form (4.2.12)
+
 ---
 
 ## Project Milestones Overview
