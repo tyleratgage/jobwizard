@@ -126,18 +126,23 @@
             </div>
 
             {{-- Contact Phone --}}
-            <div>
+            <div
+                x-data="phoneInput('{{ $employerContactPhone }}')"
+                x-init="$watch('phone', value => $wire.set('employerContactPhone', value))"
+            >
                 <label for="employerContactPhone" class="block text-sm font-medium text-gray-700 mb-1">
                     Contact Phone <span class="text-red-500">*</span>
                 </label>
                 <input
                     type="tel"
                     id="employerContactPhone"
-                    wire:model="employerContactPhone"
+                    x-model="phone"
+                    x-on:input="format($event)"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('employerContactPhone') border-red-300 @enderror"
-                    placeholder="(555) 123-4567"
+                    placeholder="(555) 555-5555"
                     required
                 >
+                <p class="mt-1 text-xs text-gray-500">Format: (555) 555-5555</p>
                 @error('employerContactPhone')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror

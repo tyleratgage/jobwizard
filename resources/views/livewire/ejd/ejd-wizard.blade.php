@@ -134,4 +134,70 @@
             Start Over
         </button>
     </div>
+
+    {{-- Phone Input Formatting Component --}}
+    <script>
+        /**
+         * Alpine.js component for US phone number formatting
+         * Formats input as (555) 555-5555 while preserving cursor position
+         */
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('phoneInput', (initialValue = '') => ({
+                phone: initialValue,
+
+                /**
+                 * Format phone number as user types
+                 * Handles cursor position intelligently
+                 */
+                format(event) {
+                    const input = event.target;
+                    const cursorPosition = input.selectionStart;
+                    const previousLength = this.phone.length;
+
+                    // Strip all non-digits
+                    let digits = input.value.replace(/\D/g, '');
+
+                    // Limit to 10 digits (US phone number)
+                    digits = digits.substring(0, 10);
+
+                    // Format the number
+                    let formatted = '';
+                    if (digits.length > 0) {
+                        formatted = '(' + digits.substring(0, 3);
+                    }
+                    if (digits.length >= 3) {
+                        formatted += ') ' + digits.substring(3, 6);
+                    }
+                    if (digits.length >= 6) {
+                        formatted += '-' + digits.substring(6, 10);
+                    }
+
+                    this.phone = formatted;
+
+                    // Adjust cursor position after formatting
+                    this.$nextTick(() => {
+                        const newLength = formatted.length;
+                        const lengthDiff = newLength - previousLength;
+
+                        // Calculate new cursor position
+                        let newCursor = cursorPosition + lengthDiff;
+
+                        // Handle special positions (after formatting characters)
+                        if (cursorPosition === 1 && lengthDiff > 0) {
+                            newCursor = 2; // After opening paren
+                        } else if (cursorPosition === 4 && digits.length >= 3) {
+                            newCursor = 6; // After ") "
+                        } else if (cursorPosition === 9 && digits.length >= 6) {
+                            newCursor = 10; // After "-"
+                        }
+
+                        // Ensure cursor stays within bounds
+                        newCursor = Math.max(0, Math.min(newCursor, newLength));
+
+                        input.setSelectionRange(newCursor, newCursor);
+                    });
+                }
+            }));
+        });
+    </script>
 </div>

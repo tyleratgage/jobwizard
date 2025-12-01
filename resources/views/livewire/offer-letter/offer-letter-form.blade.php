@@ -623,7 +623,10 @@
                     </div>
 
                     {{-- Supervisor Phone --}}
-                    <div>
+                    <div
+                        x-data="phoneInput('{{ $supervisorPhone }}')"
+                        x-init="$watch('phone', value => $wire.set('supervisorPhone', value))"
+                    >
                         <label for="supervisorPhone" class="block text-sm font-medium text-gray-700 mb-1">
                             <span class="text-red-500" aria-hidden="true">*</span>
                             <span class="sr-only">Required:</span> Supervisor Phone #
@@ -631,21 +634,26 @@
                         <input
                             type="tel"
                             id="supervisorPhone"
-                            wire:model="supervisorPhone"
-                            placeholder="(xxx) xxx-xxxx"
+                            x-model="phone"
+                            x-on:input="format($event)"
+                            placeholder="(555) 555-5555"
                             autocomplete="tel"
                             aria-required="true"
                             aria-invalid="{{ $errors->has('supervisorPhone') ? 'true' : 'false' }}"
-                            @if($errors->has('supervisorPhone')) aria-describedby="supervisorPhone-error" @endif
+                            aria-describedby="supervisorPhone-hint{{ $errors->has('supervisorPhone') ? ' supervisorPhone-error' : '' }}"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('supervisorPhone') border-red-500 @enderror"
                         >
+                        <p id="supervisorPhone-hint" class="mt-1 text-xs text-gray-500">Format: (555) 555-5555</p>
                         @error('supervisorPhone')
                             <p id="supervisorPhone-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Contact Phone --}}
-                    <div>
+                    <div
+                        x-data="phoneInput('{{ $contactPhone }}')"
+                        x-init="$watch('phone', value => $wire.set('contactPhone', value))"
+                    >
                         <label for="contactPhone" class="block text-sm font-medium text-gray-700 mb-1">
                             <span class="text-red-500" aria-hidden="true">*</span>
                             <span class="sr-only">Required:</span> Contact Phone #
@@ -653,14 +661,16 @@
                         <input
                             type="tel"
                             id="contactPhone"
-                            wire:model="contactPhone"
-                            placeholder="(xxx) xxx-xxxx"
+                            x-model="phone"
+                            x-on:input="format($event)"
+                            placeholder="(555) 555-5555"
                             autocomplete="tel"
                             aria-required="true"
                             aria-invalid="{{ $errors->has('contactPhone') ? 'true' : 'false' }}"
-                            @if($errors->has('contactPhone')) aria-describedby="contactPhone-error" @endif
+                            aria-describedby="contactPhone-hint{{ $errors->has('contactPhone') ? ' contactPhone-error' : '' }}"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('contactPhone') border-red-500 @enderror"
                         >
+                        <p id="contactPhone-hint" class="mt-1 text-xs text-gray-500">Format: (555) 555-5555</p>
                         @error('contactPhone')
                             <p id="contactPhone-error" class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                         @enderror
@@ -811,6 +821,72 @@
             padding-left: 0;
         }
     </style>
+
+    {{-- Phone Input Formatting Component --}}
+    <script>
+        /**
+         * Alpine.js component for US phone number formatting
+         * Formats input as (555) 555-5555 while preserving cursor position
+         */
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('phoneInput', (initialValue = '') => ({
+                phone: initialValue,
+
+                /**
+                 * Format phone number as user types
+                 * Handles cursor position intelligently
+                 */
+                format(event) {
+                    const input = event.target;
+                    const cursorPosition = input.selectionStart;
+                    const previousLength = this.phone.length;
+
+                    // Strip all non-digits
+                    let digits = input.value.replace(/\D/g, '');
+
+                    // Limit to 10 digits (US phone number)
+                    digits = digits.substring(0, 10);
+
+                    // Format the number
+                    let formatted = '';
+                    if (digits.length > 0) {
+                        formatted = '(' + digits.substring(0, 3);
+                    }
+                    if (digits.length >= 3) {
+                        formatted += ') ' + digits.substring(3, 6);
+                    }
+                    if (digits.length >= 6) {
+                        formatted += '-' + digits.substring(6, 10);
+                    }
+
+                    this.phone = formatted;
+
+                    // Adjust cursor position after formatting
+                    this.$nextTick(() => {
+                        const newLength = formatted.length;
+                        const lengthDiff = newLength - previousLength;
+
+                        // Calculate new cursor position
+                        let newCursor = cursorPosition + lengthDiff;
+
+                        // Handle special positions (after formatting characters)
+                        if (cursorPosition === 1 && lengthDiff > 0) {
+                            newCursor = 2; // After opening paren
+                        } else if (cursorPosition === 4 && digits.length >= 3) {
+                            newCursor = 6; // After ") "
+                        } else if (cursorPosition === 9 && digits.length >= 6) {
+                            newCursor = 10; // After "-"
+                        }
+
+                        // Ensure cursor stays within bounds
+                        newCursor = Math.max(0, Math.min(newCursor, newLength));
+
+                        input.setSelectionRange(newCursor, newCursor);
+                    });
+                }
+            }));
+        });
+    </script>
 
     {{-- Keyboard Navigation Enhancement Script --}}
     <script>
