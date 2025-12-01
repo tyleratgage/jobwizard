@@ -1,0 +1,513 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire\Ejd;
+
+use App\Enums\JobLocation;
+use App\Models\Job;
+use App\Models\Task;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+
+/**
+ * Single-page EJD Form Component.
+ *
+ * Replaces the multi-step wizard with a reactive single-page form
+ * that matches the legacy application field structure exactly.
+ */
+#[Layout('components.layouts.app')]
+#[Title('Essential Job Description Form')]
+class EjdForm extends Component
+{
+    /**
+     * Physical demand categories matching legacy system.
+     * Maps legacy keys to display names.
+     */
+    public const PHYSICAL_DEMANDS = [
+        'sit' => 'Sitting',
+        'stand' => 'Standing',
+        'walk' => 'Walking',
+        'climb' => 'Climbing Ladders/Stairs',
+        'twist' => 'Twisting at the Waist',
+        'bend' => 'Bending/Stooping',
+        'knee' => 'Squatting/Kneeling',
+        'crawl' => 'Crawling',
+        'reachOut' => 'Reaching Out',
+        'aboveShoulders' => 'Working above Shoulders',
+        'handle' => 'Handling/Grasping',
+        'manipulation' => 'Fine Finger Manipulation',
+        'footDrive' => 'Foot Controls/Driving',
+        'repetitive' => 'Repetitive Motion',
+        'talkHearSee' => 'Talking/Hearing/Seeing',
+        'vibratory' => 'Vibratory Tasks',
+        'other' => 'Comments/Other',
+    ];
+
+    /**
+     * Lifting/Pushing categories with weight fields.
+     */
+    public const LIFTING_DEMANDS = [
+        'lift' => 'Lifting',
+        'carry' => 'Carrying',
+        'push' => 'Pushing/Pulling',
+    ];
+
+    /**
+     * Maps legacy physical demand keys to Task model column names.
+     */
+    public const DEMAND_COLUMN_MAP = [
+        'sit' => 'sitting',
+        'stand' => 'standing',
+        'walk' => 'walking',
+        'climb' => 'climbing',
+        'twist' => 'twisting',
+        'bend' => 'bending',
+        'knee' => 'kneeling',
+        'crawl' => 'crawling',
+        'reachOut' => 'reaching_outward',
+        'aboveShoulders' => 'reaching_overhead',
+        'handle' => 'handling',
+        'manipulation' => 'fine_manipulation',
+        'footDrive' => 'foot_driving',
+        'repetitive' => 'repetitive_motions',
+        'talkHearSee' => 'talk_hear_see',
+        'vibratory' => 'vibratory',
+        'other' => 'other',
+        'lift' => 'lifting',
+        'carry' => 'carrying',
+        'push' => 'pushing_pulling',
+    ];
+
+    /**
+     * Frequency options (1-5 maps to N/S/O/F/C).
+     */
+    public const FREQUENCY_OPTIONS = [
+        1 => 'N',
+        2 => 'S',
+        3 => 'O',
+        4 => 'F',
+        5 => 'C',
+    ];
+
+    public const FREQUENCY_LABELS = [
+        1 => 'Never (not at all)',
+        2 => 'Seldom (1-10%)',
+        3 => 'Occasional (11-33%)',
+        4 => 'Frequent (34-66%)',
+        5 => 'Constant (67-100%)',
+    ];
+
+    // Section 1: Basic Information
+    public string $employer = '';
+
+    public string $phone = '';
+
+    public string $title = '';
+
+    public string $workerName = '';
+
+    public string $claimNo = '';
+
+    public string $date = '';
+
+    // Section 2: Job Details
+    public string $location = '';
+
+    public int $hrPerDay = 0;
+
+    public int $daysWkPerShift = 0;
+
+    // Section 3: Job Selection (multi-select)
+    public array $jobTitle = [];
+
+    // Section 4: Tasks
+    public array $tasks = [];
+
+    public string $newTask = '';
+
+    public string $toolsEquipment = '';
+
+    // Section 5: Physical Demands
+    // Frequencies keyed by demand name (1-5)
+    public array $frequencies = [];
+
+    // Descriptions keyed by demand name
+    public array $descriptions = [];
+
+    // Lifting/Pushing with lbs
+    public string $lbsLift = '';
+
+    public string $lbsCarry = '';
+
+    public string $lbsPush = '';
+
+    // Honeypot for spam protection
+    public string $mycompany = '';
+
+    // Form state
+    public bool $showPreview = false;
+
+    /**
+     * Mount the component.
+     */
+    public function mount(): void
+    {
+        $this->date = now()->format('Y-m-d');
+        $this->initializeFrequencies();
+    }
+
+    /**
+     * Initialize all frequency and description arrays.
+     */
+    protected function initializeFrequencies(): void
+    {
+        foreach (array_keys(self::PHYSICAL_DEMANDS) as $demand) {
+            $this->frequencies[$demand] = 1; // Default to Never
+            $this->descriptions[$demand] = '';
+        }
+        foreach (array_keys(self::LIFTING_DEMANDS) as $demand) {
+            $this->frequencies[$demand] = 1;
+            $this->descriptions[$demand] = '';
+        }
+        // For newTask
+        $this->frequencies['newTask'] = 1;
+        $this->descriptions['newTask'] = '';
+    }
+
+    /**
+     * Get location options for radio buttons.
+     */
+    #[Computed]
+    public function locationOptions(): array
+    {
+        return JobLocation::options();
+    }
+
+    /**
+     * Get hours per day options.
+     */
+    #[Computed]
+    public function hoursOptions(): array
+    {
+        return range(0, 10);
+    }
+
+    /**
+     * Get days per week options.
+     */
+    #[Computed]
+    public function daysOptions(): array
+    {
+        return range(0, 5);
+    }
+
+    /**
+     * Get available jobs filtered by selected location.
+     */
+    #[Computed]
+    public function availableJobs(): Collection
+    {
+        if (empty($this->location)) {
+            return collect();
+        }
+
+        return Job::atLocation(JobLocation::from($this->location))
+            ->ordered()
+            ->get();
+    }
+
+    /**
+     * Get available tasks filtered by selected job(s).
+     */
+    #[Computed]
+    public function availableTasks(): Collection
+    {
+        if (empty($this->jobTitle)) {
+            return collect();
+        }
+
+        // Get all tasks related to any of the selected jobs
+        return Task::whereHas('jobs', function ($query) {
+            $query->whereIn('ejd_jobs.id', $this->jobTitle);
+        })
+            ->ordered()
+            ->get()
+            ->unique('id');
+    }
+
+    /**
+     * Get the selected jobs.
+     */
+    #[Computed]
+    public function selectedJobs(): Collection
+    {
+        if (empty($this->jobTitle)) {
+            return collect();
+        }
+
+        return Job::whereIn('id', $this->jobTitle)->ordered()->get();
+    }
+
+    /**
+     * Get the selected tasks.
+     */
+    #[Computed]
+    public function selectedTasks(): Collection
+    {
+        if (empty($this->tasks)) {
+            return collect();
+        }
+
+        return Task::whereIn('id', $this->tasks)->ordered()->get();
+    }
+
+    /**
+     * Handle location change - reset dependent fields.
+     */
+    public function updatedLocation(): void
+    {
+        $this->jobTitle = [];
+        $this->tasks = [];
+        $this->toolsEquipment = '';
+        $this->initializeFrequencies();
+    }
+
+    /**
+     * Handle job selection change - reset tasks and recalculate.
+     */
+    public function updatedJobTitle(): void
+    {
+        $this->tasks = [];
+        $this->toolsEquipment = '';
+        $this->initializeFrequencies();
+    }
+
+    /**
+     * Handle task selection change - update equipment and calculate demands.
+     */
+    public function updatedTasks(): void
+    {
+        $this->updateEquipmentFromTasks();
+        $this->calculatePhysicalDemands();
+    }
+
+    /**
+     * Update equipment textarea from selected tasks.
+     */
+    protected function updateEquipmentFromTasks(): void
+    {
+        $tasks = $this->selectedTasks;
+
+        if ($tasks->isEmpty()) {
+            $this->toolsEquipment = '';
+
+            return;
+        }
+
+        // Collect unique equipment from all selected tasks
+        $equipment = $tasks
+            ->pluck('equipment')
+            ->filter()
+            ->flatMap(fn ($eq) => array_map('trim', explode(',', $eq)))
+            ->filter()
+            ->unique()
+            ->sort()
+            ->implode(', ');
+
+        $this->toolsEquipment = $equipment;
+    }
+
+    /**
+     * Calculate physical demand averages from selected tasks.
+     * Uses ceiling of average, matching legacy behavior.
+     */
+    protected function calculatePhysicalDemands(): void
+    {
+        $tasks = $this->selectedTasks;
+
+        if ($tasks->isEmpty()) {
+            $this->initializeFrequencies();
+
+            return;
+        }
+
+        $count = $tasks->count();
+
+        // Calculate average for each physical demand
+        foreach (self::DEMAND_COLUMN_MAP as $legacyKey => $columnName) {
+            $sum = $tasks->sum($columnName);
+            // Legacy uses ceil of average, then adds 1 for 1-based radio
+            // But our columns are already 0-4 (matching frequency values 0-4)
+            // We need to map to 1-5 for the radio buttons
+            $avg = (int) ceil($sum / $count);
+            $this->frequencies[$legacyKey] = min(5, max(1, $avg + 1));
+        }
+    }
+
+    /**
+     * Select all available tasks.
+     */
+    public function selectAllTasks(): void
+    {
+        $this->tasks = $this->availableTasks->pluck('id')->toArray();
+        $this->updatedTasks();
+    }
+
+    /**
+     * Clear all task selections.
+     */
+    public function clearAllTasks(): void
+    {
+        $this->tasks = [];
+        $this->updatedTasks();
+    }
+
+    /**
+     * Format phone number as user types.
+     */
+    public function updatedPhone(): void
+    {
+        // Remove all non-digits
+        $digits = preg_replace('/\D/', '', $this->phone);
+
+        // Format as xxx-xxx-xxxx
+        if (strlen($digits) >= 10) {
+            $digits = substr($digits, 0, 10);
+            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6, 4);
+        } elseif (strlen($digits) >= 6) {
+            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6);
+        } elseif (strlen($digits) >= 3) {
+            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3);
+        } else {
+            $this->phone = $digits;
+        }
+    }
+
+    /**
+     * Get validation rules.
+     */
+    protected function rules(): array
+    {
+        return [
+            'mycompany' => 'size:0',
+            'employer' => 'required|string|max:255',
+            'phone' => ['required', 'regex:/^\d{3}-\d{3}-\d{4}$/'],
+            'title' => 'required|string|max:255',
+            'workerName' => 'required|string|max:255',
+            'claimNo' => 'nullable|string|max:50',
+            'date' => 'required|date',
+            'location' => 'required|in:office,yard,job',
+            'hrPerDay' => 'required|integer|min:1|max:10',
+            'daysWkPerShift' => 'required|integer|min:1|max:5',
+            'jobTitle' => 'required|array|min:1',
+            'jobTitle.*' => 'integer|exists:ejd_jobs,id',
+            'tasks' => 'required|array|min:1',
+            'tasks.*' => 'integer|exists:ejd_tasks,id',
+            'toolsEquipment' => 'required|string',
+            'frequencies.*' => 'required|integer|min:1|max:5',
+            'lbsLift' => 'required_unless:frequencies.lift,1|nullable|numeric|min:0',
+            'lbsCarry' => 'required_unless:frequencies.carry,1|nullable|numeric|min:0',
+            'lbsPush' => 'required_unless:frequencies.push,1|nullable|numeric|min:0',
+        ];
+    }
+
+    /**
+     * Get validation messages.
+     */
+    protected function messages(): array
+    {
+        return [
+            'mycompany.size' => 'Spam detected.',
+            'employer.required' => 'Employer name is required.',
+            'phone.required' => 'Phone number is required.',
+            'phone.regex' => 'Phone must be in format xxx-xxx-xxxx.',
+            'title.required' => 'Title is required.',
+            'workerName.required' => 'Worker name is required.',
+            'date.required' => 'Date is required.',
+            'location.required' => 'Please select a location.',
+            'hrPerDay.required' => 'Hours per day is required.',
+            'hrPerDay.min' => 'Hours per day must be at least 1.',
+            'daysWkPerShift.required' => 'Days per week is required.',
+            'daysWkPerShift.min' => 'Days per week must be at least 1.',
+            'jobTitle.required' => 'Please select at least one job title.',
+            'jobTitle.min' => 'Please select at least one job title.',
+            'tasks.required' => 'Please select at least one task.',
+            'tasks.min' => 'Please select at least one task.',
+            'toolsEquipment.required' => 'Equipment and tools is required.',
+            'lbsLift.required_unless' => 'Please enter weight for Lifting.',
+            'lbsCarry.required_unless' => 'Please enter weight for Carrying.',
+            'lbsPush.required_unless' => 'Please enter weight for Pushing/Pulling.',
+        ];
+    }
+
+    /**
+     * Generate the form / show preview.
+     */
+    public function generateForm(): void
+    {
+        $this->validate();
+
+        $this->showPreview = true;
+    }
+
+    /**
+     * Go back to editing.
+     */
+    public function editForm(): void
+    {
+        $this->showPreview = false;
+    }
+
+    /**
+     * Get job title string for display.
+     */
+    #[Computed]
+    public function jobTitleDisplay(): string
+    {
+        return $this->selectedJobs->pluck('name')->implode(', ');
+    }
+
+    /**
+     * Get tasks string for display.
+     */
+    #[Computed]
+    public function tasksDisplay(): string
+    {
+        $taskNames = $this->selectedTasks->pluck('name')->toArray();
+
+        if ($this->newTask) {
+            $taskNames[] = $this->newTask;
+        }
+
+        if (empty($taskNames)) {
+            return '';
+        }
+
+        // First task capitalized, rest lowercase
+        $first = array_shift($taskNames);
+        $rest = array_map('lcfirst', $taskNames);
+
+        return $first.(empty($rest) ? '' : ', '.implode(', ', $rest)).'.';
+    }
+
+    /**
+     * Get frequency letter for display.
+     */
+    public function getFrequencyLetter(int $value): string
+    {
+        return self::FREQUENCY_OPTIONS[$value] ?? 'N';
+    }
+
+    /**
+     * Render the component.
+     */
+    public function render(): View
+    {
+        return view('livewire.ejd.ejd-form');
+    }
+}
