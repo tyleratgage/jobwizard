@@ -21,21 +21,23 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 ## 🚀 Next Steps (Pick Up Here)
 
 **Last Updated:** November 30, 2025
-**Current Status:** M1 ✅ | M2 ✅ | M3 🔄 (85% complete) | M4 ☐ | M5 ☐
+**Current Status:** M1 ✅ | M2 ✅ | M3 🔄 (85% complete) | M4 🔄 (75% complete) | M5 ☐
 
-**Live URL:** https://ejd.gagedesign.com/ejd
+**Live URLs:**
+- EJD Form: https://ejd.gagedesign.com/ejd
+- Offer Letter: https://ejd.gagedesign.com/offer-letter
 
-### Option A: Complete M3 Core (Recommended)
-Install Browsershot and enable PDF generation for the EJD form:
+### Option A: Complete M4 Offer Letter System (Current)
+Template migration and form complete (4.1.1-4.1.8, 4.2.1-4.2.11). Next steps:
+1. Add accessibility features (4.2.12)
+2. Write component tests (4.2.13)
+3. PDF generation service (4.3.1-4.3.10) - shares Browsershot with M3
+
+### Option B: Install Browsershot (Enables PDF for both M3 & M4)
+Install Browsershot and enable PDF generation for both forms:
 1. Install Chromium/Puppeteer (WBS 1.1.7)
 2. Install Spatie Browsershot package (WBS 1.2.7)
-3. Integrate PDF generation (WBS 3.6.7-3.6.8)
-
-### Option B: Start Offer Letter System (M4)
-Can run in parallel with M3 - Section 4.0:
-- Migrate 6 offer letter templates from legacy `offerLetter2021` table
-- Create OfferLetterForm Livewire component
-- PDF generation (shares Browsershot with M3)
+3. Integrate PDF generation (WBS 3.6.7-3.6.8, 4.3.1-4.3.10)
 
 ### Option C: Polish & Testing
 Complete remaining items from sections 3.2-3.6:
@@ -256,30 +258,30 @@ Complete remaining items from sections 3.2-3.6:
 #### 4.1 Template Migration
 | ID | Task | Status |
 |----|------|--------|
-| 4.1.1 | Export 6 offer letter templates from `offerLetter2021` table | ☐ |
-| 4.1.2 | Create Blade template for English Permanent letter | ☐ |
-| 4.1.3 | Create Blade template for English Temporary letter | ☐ |
-| 4.1.4 | Create Blade template for Spanish Permanent letter | ☐ |
-| 4.1.5 | Create Blade template for Spanish Temporary letter | ☐ |
-| 4.1.6 | Create Blade template for Russian Permanent letter | ☐ |
-| 4.1.7 | Create Blade template for Russian Temporary letter | ☐ |
-| 4.1.8 | Convert `[[placeholder]]` syntax to Blade `{{ $variable }}` | ☐ |
+| 4.1.1 | Export 6 offer letter templates from `offerLetter2021` table | ☑ |
+| 4.1.2 | Create Blade template for English Permanent letter | ☑ |
+| 4.1.3 | Create Blade template for English Temporary letter | ☑ |
+| 4.1.4 | Create Blade template for Spanish Permanent letter | ☑ |
+| 4.1.5 | Create Blade template for Spanish Temporary letter | ☑ |
+| 4.1.6 | Create Blade template for Russian Permanent letter | ☑ |
+| 4.1.7 | Create Blade template for Russian Temporary letter | ☑ |
+| 4.1.8 | Convert `[[placeholder]]` syntax to Blade `{{ $variable }}` | ☑ |
 | 4.1.9 | Verify all templates render correctly | ☐ |
 
 #### 4.2 Offer Letter Form
 | ID | Task | Status |
 |----|------|--------|
-| 4.2.1 | Create `OfferLetterForm` Livewire component | ☐ |
-| 4.2.2 | Implement language selector (English, Spanish, Russian) | ☐ |
-| 4.2.3 | Implement type selector (Permanent, Temporary) | ☐ |
-| 4.2.4 | Implement worker details fields | ☐ |
-| 4.2.5 | Implement supervisor/HR fields | ☐ |
-| 4.2.6 | Implement date/time fields | ☐ |
-| 4.2.7 | Implement schedule fields | ☐ |
-| 4.2.8 | Implement compensation fields | ☐ |
-| 4.2.9 | Implement CC recipients field | ☐ |
-| 4.2.10 | Add real-time validation | ☐ |
-| 4.2.11 | Style with TailwindCSS (mobile-responsive) | ☐ |
+| 4.2.1 | Create `OfferLetterForm` Livewire component | ☑ |
+| 4.2.2 | Implement language selector (English, Spanish, Russian) | ☑ |
+| 4.2.3 | Implement type selector (Permanent, Temporary) | ☑ |
+| 4.2.4 | Implement worker details fields | ☑ |
+| 4.2.5 | Implement supervisor/HR fields | ☑ |
+| 4.2.6 | Implement date/time fields | ☑ |
+| 4.2.7 | Implement schedule fields | ☑ |
+| 4.2.8 | Implement compensation fields | ☑ |
+| 4.2.9 | Implement CC recipients field | ☑ |
+| 4.2.10 | Add real-time validation | ☑ |
+| 4.2.11 | Style with TailwindCSS (mobile-responsive) | ☑ |
 | 4.2.12 | Add accessibility features | ☐ |
 | 4.2.13 | Write component tests | ☐ |
 
