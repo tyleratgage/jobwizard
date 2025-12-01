@@ -23,7 +23,7 @@
     </a>
 
     <!-- Header -->
-    <header class="bg-primary-700 text-white shadow-lg">
+    <header class="bg-header text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -32,16 +32,16 @@
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-8" aria-label="Main navigation">
-                    <a href="{{ url('/ejd') }}" class="text-primary-100 hover:text-white transition-colors {{ request()->is('ejd*') ? 'text-white font-semibold' : '' }}">
+                    <a href="{{ url('/ejd') }}" class="text-header-light hover:text-white transition-colors {{ request()->is('ejd*') ? 'text-white font-semibold' : '' }}">
                         Job Description
                     </a>
-                    <a href="{{ url('/offer-letter') }}" class="text-primary-100 hover:text-white transition-colors {{ request()->is('offer-letter*') ? 'text-white font-semibold' : '' }}">
+                    <a href="{{ url('/offer-letter') }}" class="text-header-light hover:text-white transition-colors {{ request()->is('offer-letter*') ? 'text-white font-semibold' : '' }}">
                         Offer Letter
                     </a>
                 </nav>
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button type="button" class="text-primary-100 hover:text-white" aria-label="Open menu">
+                    <button type="button" class="text-header-light hover:text-white" aria-label="Open menu">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -57,7 +57,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 mt-auto">
+    <footer class="bg-footer text-gray-200 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="text-center text-sm">
                 <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>

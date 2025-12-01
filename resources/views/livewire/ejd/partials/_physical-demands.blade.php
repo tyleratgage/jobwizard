@@ -1,8 +1,8 @@
 {{-- Section 5: Physical Demands --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden" wire:key="physical-demands-{{ implode('-', $tasks) }}">
-    <div class="bg-blue-600 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white flex items-center">
-            <span class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</span>
+    <div class="bg-ejd-400 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
+            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</span>
             Physical Demands
         </h2>
     </div>
@@ -49,7 +49,7 @@
                                                    name="freq_{{ $key }}"
                                                    value="{{ $value }}"
                                                    wire:model="frequencies.{{ $key }}"
-                                                   class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                                   class="h-4 w-4 text-ejd-400 border-gray-300 focus:ring-ejd-400">
                                             <span class="text-xs text-gray-500 mt-1">{{ $letter }}</span>
                                         </label>
                                     @endforeach
@@ -59,7 +59,7 @@
                                 <input type="text"
                                        wire:model="descriptions.{{ $key }}"
                                        placeholder="Description (optional)"
-                                       class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                       class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-ejd-400 focus:ring-ejd-400">
                             </td>
                         </tr>
                     @endforeach
@@ -79,7 +79,7 @@
                                                    name="freq_newTask"
                                                    value="{{ $value }}"
                                                    wire:model="frequencies.newTask"
-                                                   class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                                   class="h-4 w-4 text-ejd-400 border-gray-300 focus:ring-ejd-400">
                                             <span class="text-xs text-gray-500 mt-1">{{ $letter }}</span>
                                         </label>
                                     @endforeach
@@ -89,7 +89,7 @@
                                 <input type="text"
                                        wire:model="descriptions.newTask"
                                        placeholder="Description (optional)"
-                                       class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                       class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-ejd-400 focus:ring-ejd-400">
                             </td>
                         </tr>
                     @endif
@@ -127,7 +127,7 @@
                                                    wire:model="lbs{{ ucfirst($key) }}"
                                                    placeholder="lbs"
                                                    min="0"
-                                                   class="w-16 text-sm border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('lbs'.ucfirst($key)) border-red-500 @enderror">
+                                                   class="w-16 text-sm border-gray-300 rounded-md shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('lbs'.ucfirst($key)) border-red-500 @enderror">
                                             <span class="ml-1 text-sm text-gray-500">lbs</span>
                                         </div>
                                     </div>
@@ -143,7 +143,7 @@
                                                        name="freq_{{ $key }}"
                                                        value="{{ $value }}"
                                                        wire:model="frequencies.{{ $key }}"
-                                                       class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                                       class="h-4 w-4 text-ejd-400 border-gray-300 focus:ring-ejd-400">
                                                 <span class="text-xs text-gray-500 mt-1">{{ $letter }}</span>
                                             </label>
                                         @endforeach
@@ -153,7 +153,7 @@
                                     <input type="text"
                                            wire:model="descriptions.{{ $key }}"
                                            placeholder="Description (optional)"
-                                           class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                           class="block w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-ejd-400 focus:ring-ejd-400">
                                 </td>
                             </tr>
                         @endforeach

@@ -1,11 +1,11 @@
 {{-- Section 4: Tasks --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden" wire:key="tasks-{{ implode('-', $jobTitle) }}">
-    <div class="bg-blue-600 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white flex items-center">
-            <span class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
+    <div class="bg-ejd-400 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
+            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
             Tasks
         </h2>
-        <p class="text-blue-100 text-sm mt-1">Check or uncheck tasks as needed</p>
+        <p class="text-ejd-700 text-shadow-dark text-sm mt-1">Check or uncheck tasks as needed</p>
     </div>
 
     <div class="p-6">
@@ -16,7 +16,7 @@
             <div class="flex gap-3 mb-4">
                 <button type="button"
                         wire:click="selectAllTasks"
-                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ejd-400">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -24,7 +24,7 @@
                 </button>
                 <button type="button"
                         wire:click="clearAllTasks"
-                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ejd-400">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -90,7 +90,7 @@
                        id="newTask"
                        wire:model="newTask"
                        placeholder="Enter a custom task if needed"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400">
             </div>
 
             {{-- Equipment & Tools --}}
@@ -103,7 +103,7 @@
                 <textarea id="toolsEquipment"
                           wire:model="toolsEquipment"
                           rows="4"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('toolsEquipment') border-red-500 @enderror"></textarea>
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('toolsEquipment') border-red-500 @enderror"></textarea>
                 @error('toolsEquipment')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror

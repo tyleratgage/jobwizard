@@ -1,8 +1,8 @@
 {{-- Section 1: Basic Information --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-    <div class="bg-blue-600 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white flex items-center">
-            <span class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
+    <div class="bg-ejd-400 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
+            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
             Basic Information
         </h2>
     </div>
@@ -19,7 +19,7 @@
                     <input type="text"
                            id="employer"
                            wire:model="employer"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('employer') border-red-500 @enderror"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('employer') border-red-500 @enderror"
                            required>
                     @error('employer')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -35,7 +35,7 @@
                            id="phone"
                            wire:model.live.debounce.300ms="phone"
                            placeholder="xxx-xxx-xxxx"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('phone') border-red-500 @enderror"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('phone') border-red-500 @enderror"
                            required>
                     @error('phone')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -50,7 +50,7 @@
                     <input type="text"
                            id="title"
                            wire:model="title"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('title') border-red-500 @enderror"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('title') border-red-500 @enderror"
                            required>
                     @error('title')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -68,7 +68,7 @@
                     <input type="text"
                            id="workerName"
                            wire:model="workerName"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('workerName') border-red-500 @enderror"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('workerName') border-red-500 @enderror"
                            required>
                     @error('workerName')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -84,7 +84,7 @@
                            id="claimNo"
                            wire:model="claimNo"
                            placeholder="If known"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400">
                 </div>
 
                 {{-- Date --}}
@@ -95,7 +95,7 @@
                     <input type="date"
                            id="date"
                            wire:model="date"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('date') border-red-500 @enderror"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('date') border-red-500 @enderror"
                            required>
                     @error('date')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

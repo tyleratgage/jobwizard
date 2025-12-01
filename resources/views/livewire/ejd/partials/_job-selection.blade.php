@@ -1,8 +1,8 @@
 {{-- Section 3: Job Selection --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden" wire:key="job-selection-{{ $location }}">
-    <div class="bg-blue-600 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white flex items-center">
-            <span class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+    <div class="bg-ejd-400 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
+            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
             Choose Job Title
         </h2>
     </div>
@@ -32,11 +32,11 @@
                 <div class="space-y-2">
                     @foreach($leftJobs as $job)
                         <label class="flex items-start p-3 border rounded-lg cursor-pointer transition-colors
-                                      {{ in_array($job->id, $jobTitle) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                      {{ in_array($job->id, $jobTitle) ? 'border-ejd-400 bg-ejd-50' : 'border-gray-200 hover:border-gray-300' }}">
                             <input type="checkbox"
                                    value="{{ $job->id }}"
                                    wire:model.live="jobTitle"
-                                   class="h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                   class="h-4 w-4 mt-0.5 text-ejd-400 border-gray-300 rounded focus:ring-ejd-400">
                             <span class="ml-3">
                                 <span class="block text-sm font-medium text-gray-700">{{ $job->name }}</span>
                                 <span class="block text-xs text-gray-500">{{ $job->code }}</span>
@@ -49,11 +49,11 @@
                 <div class="space-y-2">
                     @foreach($rightJobs as $job)
                         <label class="flex items-start p-3 border rounded-lg cursor-pointer transition-colors
-                                      {{ in_array($job->id, $jobTitle) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                      {{ in_array($job->id, $jobTitle) ? 'border-ejd-400 bg-ejd-50' : 'border-gray-200 hover:border-gray-300' }}">
                             <input type="checkbox"
                                    value="{{ $job->id }}"
                                    wire:model.live="jobTitle"
-                                   class="h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                   class="h-4 w-4 mt-0.5 text-ejd-400 border-gray-300 rounded focus:ring-ejd-400">
                             <span class="ml-3">
                                 <span class="block text-sm font-medium text-gray-700">{{ $job->name }}</span>
                                 <span class="block text-xs text-gray-500">{{ $job->code }}</span>
@@ -64,8 +64,8 @@
             </div>
 
             @if(count($jobTitle) > 0)
-                <div class="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <p class="text-sm text-blue-800">
+                <div class="mt-4 p-3 bg-ejd-50 rounded-lg">
+                    <p class="text-sm text-ejd-700">
                         <strong>Selected:</strong> {{ $this->selectedJobs->pluck('name')->implode(', ') }}
                     </p>
                 </div>

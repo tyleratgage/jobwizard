@@ -1,8 +1,8 @@
 {{-- Section 2: Job Details --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-    <div class="bg-blue-600 px-6 py-4">
-        <h2 class="text-xl font-semibold text-white flex items-center">
-            <span class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+    <div class="bg-ejd-400 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white text-shadow-dark flex items-center">
+            <span class="bg-white text-ejd-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
             Essential Task Description
         </h2>
     </div>
@@ -19,12 +19,12 @@
                     <div class="space-y-2">
                         @foreach($this->locationOptions as $value => $label)
                             <label class="flex items-center p-3 border rounded-lg cursor-pointer transition-colors
-                                          {{ $location === $value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                          {{ $location === $value ? 'border-ejd-400 bg-ejd-50' : 'border-gray-200 hover:border-gray-300' }}">
                                 <input type="radio"
                                        name="location"
                                        value="{{ $value }}"
                                        wire:model.live="location"
-                                       class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                       class="h-4 w-4 text-ejd-400 border-gray-300 focus:ring-ejd-400">
                                 <span class="ml-3 text-sm font-medium text-gray-700">{{ $label }}</span>
                             </label>
                         @endforeach
@@ -44,7 +44,7 @@
                     </label>
                     <select id="hrPerDay"
                             wire:model="hrPerDay"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('hrPerDay') border-red-500 @enderror">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('hrPerDay') border-red-500 @enderror">
                         @foreach($this->hoursOptions as $hour)
                             <option value="{{ $hour }}">{{ $hour }}</option>
                         @endforeach
@@ -61,7 +61,7 @@
                     </label>
                     <select id="daysWkPerShift"
                             wire:model="daysWkPerShift"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('daysWkPerShift') border-red-500 @enderror">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('daysWkPerShift') border-red-500 @enderror">
                         @foreach($this->daysOptions as $day)
                             <option value="{{ $day }}">{{ $day }}</option>
                         @endforeach
