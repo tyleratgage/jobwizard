@@ -32,16 +32,16 @@
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-8" aria-label="Main navigation">
-                    <a href="{{ url('/ejd') }}" class="text-header-light hover:text-white transition-colors {{ request()->is('ejd*') ? 'text-white font-semibold' : '' }}">
+                    <a href="{{ url('/ejd') }}" class="text-header-link hover:text-header-link-hover transition-colors {{ request()->is('ejd*') ? 'text-white font-semibold' : '' }}">
                         Job Description
                     </a>
-                    <a href="{{ url('/offer-letter') }}" class="text-header-light hover:text-white transition-colors {{ request()->is('offer-letter*') ? 'text-white font-semibold' : '' }}">
+                    <a href="{{ url('/offer-letter') }}" class="text-header-link hover:text-header-link-hover transition-colors {{ request()->is('offer-letter*') ? 'text-white font-semibold' : '' }}">
                         Offer Letter
                     </a>
                 </nav>
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button type="button" class="text-header-light hover:text-white" aria-label="Open menu">
+                    <button type="button" class="text-header-link hover:text-header-link-hover" aria-label="Open menu">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -79,9 +79,9 @@
         <!-- Funding Text - Dark Background -->
         <div class="bg-footer py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-gray-400">Funding and support for the SMART / MBA Return to Work grant has been provided by the State of Washington, Department of Labor and Industries, Safety and Health Investment Projects.</p>
-                <p class="text-center text-sm text-gray-500 mt-3">
-                    <a href="{{ route('privacy') }}" class="hover:text-gray-300 transition-colors">Privacy Policy</a>
+                <p class="text-center text-sm text-footer-text">Funding and support for the SMART / MBA Return to Work grant has been provided by the State of Washington, Department of Labor and Industries, Safety and Health Investment Projects.</p>
+                <p class="text-center text-sm mt-3">
+                    <a href="{{ route('privacy') }}" class="text-footer-link hover:text-footer-link-hover transition-colors">Privacy Policy</a>
                 </p>
             </div>
         </div>

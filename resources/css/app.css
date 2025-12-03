@@ -30,9 +30,14 @@
     --color-header: #6a8fa6;
     --color-header-light: #8aa9bc;
     --color-header-dark: #567a8f;
+    --color-header-link: #d4e5ed;
+    --color-header-link-hover: #ffffff;
     --color-footer: #435a68;
     --color-footer-light: #5a7080;
     --color-footer-dark: #354854;
+    --color-footer-text: #b8c7d1;
+    --color-footer-link: #9dc3d9;
+    --color-footer-link-hover: #d4e5ed;
 
     /* Legacy primary colors (kept for compatibility) */
     --color-primary-50: #eff6ff;
