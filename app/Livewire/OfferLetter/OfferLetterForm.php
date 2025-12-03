@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Livewire\OfferLetter;
 
 use App\Services\OfferLetterPdfService;
+use App\Services\PresetStorage;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -183,6 +185,13 @@ class OfferLetterForm extends Component
     // Form state
     public bool $showPreview = false;
 
+    // Preset token (from URL query param)
+    #[Url(as: 'preset')]
+    public string $presetToken = '';
+
+    // Track if we're working with an existing preset
+    public bool $hasActivePreset = false;
+
     /**
      * Mount the component.
      */
@@ -191,6 +200,130 @@ class OfferLetterForm extends Component
         // Set default CC placeholders
         $this->ccLine1 = "Claim's Manager w/encl.";
         $this->ccLine2 = 'Physician w/encl.';
+
+        // Load preset if token provided in URL
+        if ($this->presetToken) {
+            $this->loadPresetFromToken($this->presetToken);
+        }
+    }
+
+    /**
+     * Load a preset from token.
+     */
+    protected function loadPresetFromToken(string $token): void
+    {
+        $storage = new PresetStorage();
+        $preset = $storage->load($token);
+
+        if (!$preset || $preset['type'] !== 'offer-letter') {
+            $this->presetToken = '';
+            return;
+        }
+
+        $this->hydrateFromPreset($preset['data']);
+        $this->hasActivePreset = true;
+    }
+
+    /**
+     * Hydrate form fields from preset data.
+     */
+    protected function hydrateFromPreset(array $data): void
+    {
+        $this->jobType = $data['jobType'] ?? 'permanent';
+        $this->language = $data['language'] ?? 'english';
+        $this->firstName = $data['firstName'] ?? '';
+        $this->lastName = $data['lastName'] ?? '';
+        $this->addressOne = $data['addressOne'] ?? '';
+        $this->addressTwo = $data['addressTwo'] ?? '';
+        $this->city = $data['city'] ?? '';
+        $this->state = $data['state'] ?? 'WA';
+        $this->zip = $data['zip'] ?? '';
+        $this->claimNo = $data['claimNo'] ?? '';
+        $this->drApprovalDate = $data['drApprovalDate'] ?? '';
+        $this->workDate = $data['workDate'] ?? '';
+        $this->startTime = $data['startTime'] ?? '';
+        $this->endTime = $data['endTime'] ?? '';
+        $this->hoursPerWeek = $data['hoursPerWeek'] ?? 40;
+        $this->daysOfTheWeek = $data['daysOfTheWeek'] ?? [];
+        $this->wage = $data['wage'] ?? '';
+        $this->wageDuration = $data['wageDuration'] ?? 'hour';
+        $this->locationAddress = $data['locationAddress'] ?? '';
+        $this->locationCity = $data['locationCity'] ?? '';
+        $this->locationState = $data['locationState'] ?? 'WA';
+        $this->locationZip = $data['locationZip'] ?? '';
+        $this->supervisorName = $data['supervisorName'] ?? '';
+        $this->supervisorPhone = $data['supervisorPhone'] ?? '';
+        $this->contactPhone = $data['contactPhone'] ?? '';
+        $this->valediction = $data['valediction'] ?? '';
+        $this->ccLine1 = $data['ccLine1'] ?? "Claim's Manager w/encl.";
+        $this->ccLine2 = $data['ccLine2'] ?? 'Physician w/encl.';
+        $this->ccLine3 = $data['ccLine3'] ?? '';
+    }
+
+    /**
+     * Get current form data as array for saving.
+     */
+    protected function getFormDataForPreset(): array
+    {
+        return [
+            'jobType' => $this->jobType,
+            'language' => $this->language,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'addressOne' => $this->addressOne,
+            'addressTwo' => $this->addressTwo,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zip' => $this->zip,
+            'claimNo' => $this->claimNo,
+            'drApprovalDate' => $this->drApprovalDate,
+            'workDate' => $this->workDate,
+            'startTime' => $this->startTime,
+            'endTime' => $this->endTime,
+            'hoursPerWeek' => $this->hoursPerWeek,
+            'daysOfTheWeek' => $this->daysOfTheWeek,
+            'wage' => $this->wage,
+            'wageDuration' => $this->wageDuration,
+            'locationAddress' => $this->locationAddress,
+            'locationCity' => $this->locationCity,
+            'locationState' => $this->locationState,
+            'locationZip' => $this->locationZip,
+            'supervisorName' => $this->supervisorName,
+            'supervisorPhone' => $this->supervisorPhone,
+            'contactPhone' => $this->contactPhone,
+            'valediction' => $this->valediction,
+            'ccLine1' => $this->ccLine1,
+            'ccLine2' => $this->ccLine2,
+            'ccLine3' => $this->ccLine3,
+        ];
+    }
+
+    /**
+     * Save current form as a preset.
+     */
+    public function savePreset(): void
+    {
+        $storage = new PresetStorage();
+
+        // If we have an active preset, update it; otherwise create new
+        $token = $this->hasActivePreset ? $this->presetToken : null;
+
+        $this->presetToken = $storage->save('offer-letter', $this->getFormDataForPreset(), $token);
+        $this->hasActivePreset = true;
+
+        // Dispatch browser event to show the shareable URL
+        $this->dispatch('preset-saved', url: url('/offer-letter?preset=' . $this->presetToken));
+    }
+
+    /**
+     * Clear form and start fresh (removes preset association).
+     */
+    public function clearForm(): void
+    {
+        $this->reset();
+        $this->mount();
+        $this->presetToken = '';
+        $this->hasActivePreset = false;
     }
 
     /**

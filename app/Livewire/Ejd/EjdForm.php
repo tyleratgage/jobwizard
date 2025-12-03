@@ -8,11 +8,13 @@ use App\Enums\JobLocation;
 use App\Models\Job;
 use App\Models\Task;
 use App\Services\EjdPdfService;
+use App\Services\PresetStorage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -154,11 +156,143 @@ class EjdForm extends Component
     // Form state
     public bool $showPreview = false;
 
+    // Preset token (from URL query param)
+    #[Url(as: 'preset')]
+    public string $presetToken = '';
+
+    // Track if we're working with an existing preset
+    public bool $hasActivePreset = false;
+
     /**
      * Mount the component.
      */
     public function mount(): void
     {
+        $this->date = now()->format('Y-m-d');
+        $this->initializeFrequencies();
+
+        // Load preset if token provided in URL
+        if ($this->presetToken) {
+            $this->loadPresetFromToken($this->presetToken);
+        }
+    }
+
+    /**
+     * Load a preset from token.
+     */
+    protected function loadPresetFromToken(string $token): void
+    {
+        $storage = new PresetStorage();
+        $preset = $storage->load($token);
+
+        if (!$preset || $preset['type'] !== 'ejd') {
+            $this->presetToken = '';
+            return;
+        }
+
+        $this->hydrateFromPreset($preset['data']);
+        $this->hasActivePreset = true;
+    }
+
+    /**
+     * Hydrate form fields from preset data.
+     */
+    protected function hydrateFromPreset(array $data): void
+    {
+        $this->employer = $data['employer'] ?? '';
+        $this->phone = $data['phone'] ?? '';
+        $this->title = $data['title'] ?? '';
+        $this->workerName = $data['workerName'] ?? '';
+        $this->claimNo = $data['claimNo'] ?? '';
+        $this->date = $data['date'] ?? now()->format('Y-m-d');
+        $this->location = $data['location'] ?? '';
+        $this->hrPerDay = $data['hrPerDay'] ?? 0;
+        $this->daysWkPerShift = $data['daysWkPerShift'] ?? 0;
+        $this->jobTitle = $data['jobTitle'] ?? [];
+        $this->tasks = $data['tasks'] ?? [];
+        $this->newTask = $data['newTask'] ?? '';
+        $this->toolsEquipment = $data['toolsEquipment'] ?? '';
+        $this->frequencies = $data['frequencies'] ?? [];
+        $this->descriptions = $data['descriptions'] ?? [];
+        $this->lbsLift = $data['lbsLift'] ?? '';
+        $this->lbsCarry = $data['lbsCarry'] ?? '';
+        $this->lbsPush = $data['lbsPush'] ?? '';
+
+        // Re-initialize any missing frequency keys
+        foreach (array_keys(self::PHYSICAL_DEMANDS) as $demand) {
+            if (!isset($this->frequencies[$demand])) {
+                $this->frequencies[$demand] = 1;
+            }
+            if (!isset($this->descriptions[$demand])) {
+                $this->descriptions[$demand] = '';
+            }
+        }
+        foreach (array_keys(self::LIFTING_DEMANDS) as $demand) {
+            if (!isset($this->frequencies[$demand])) {
+                $this->frequencies[$demand] = 1;
+            }
+            if (!isset($this->descriptions[$demand])) {
+                $this->descriptions[$demand] = '';
+            }
+        }
+    }
+
+    /**
+     * Get current form data as array for saving.
+     */
+    protected function getFormDataForPreset(): array
+    {
+        return [
+            'employer' => $this->employer,
+            'phone' => $this->phone,
+            'title' => $this->title,
+            'workerName' => $this->workerName,
+            'claimNo' => $this->claimNo,
+            'date' => $this->date,
+            'location' => $this->location,
+            'hrPerDay' => $this->hrPerDay,
+            'daysWkPerShift' => $this->daysWkPerShift,
+            'jobTitle' => $this->jobTitle,
+            'tasks' => $this->tasks,
+            'newTask' => $this->newTask,
+            'toolsEquipment' => $this->toolsEquipment,
+            'frequencies' => $this->frequencies,
+            'descriptions' => $this->descriptions,
+            'lbsLift' => $this->lbsLift,
+            'lbsCarry' => $this->lbsCarry,
+            'lbsPush' => $this->lbsPush,
+        ];
+    }
+
+    /**
+     * Save current form as a preset.
+     * Returns the URL with the preset token.
+     */
+    public function savePreset(): void
+    {
+        $storage = new PresetStorage();
+
+        // If we have an active preset, update it; otherwise create new
+        $token = $this->hasActivePreset ? $this->presetToken : null;
+
+        $this->presetToken = $storage->save('ejd', $this->getFormDataForPreset(), $token);
+        $this->hasActivePreset = true;
+
+        // Dispatch browser event to show the shareable URL
+        $this->dispatch('preset-saved', url: url('/ejd?preset=' . $this->presetToken));
+    }
+
+    /**
+     * Clear form and start fresh (removes preset association).
+     */
+    public function clearForm(): void
+    {
+        $this->reset([
+            'employer', 'phone', 'title', 'workerName', 'claimNo',
+            'location', 'hrPerDay', 'daysWkPerShift', 'jobTitle',
+            'tasks', 'newTask', 'toolsEquipment', 'lbsLift', 'lbsCarry', 'lbsPush',
+            'presetToken', 'hasActivePreset', 'showPreview',
+        ]);
         $this->date = now()->format('Y-m-d');
         $this->initializeFrequencies();
     }
