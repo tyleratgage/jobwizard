@@ -8,6 +8,7 @@ use App\Services\OfferLetterPdfService;
 use App\Services\PresetStorage;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -502,6 +503,13 @@ class OfferLetterForm extends Component
 
         $pdfService = new OfferLetterPdfService();
         $pdfContent = $pdfService->generate($templateName, $this->templateData);
+
+        // Log form completion
+        DB::table('form_completions')->insert([
+            'form_type' => 'offer-letter',
+            'language' => $this->language,
+            'created_at' => now(),
+        ]);
 
         $filename = 'OfferLetter_'.str_replace(' ', '_', $this->lastName).'_'.date('Y-m-d').'.pdf';
 

@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Services\EjdPdfService;
 use App\Services\PresetStorage;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -679,6 +680,13 @@ class EjdForm extends Component
 
         $pdfService = new EjdPdfService();
         $pdfContent = $pdfService->generate($data);
+
+        // Log form completion
+        DB::table('form_completions')->insert([
+            'form_type' => 'ejd',
+            'language' => 'english',
+            'created_at' => now(),
+        ]);
 
         $filename = 'EJD_'.str_replace(' ', '_', $this->workerName).'_'.date('Y-m-d').'.pdf';
 
