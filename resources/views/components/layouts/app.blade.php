@@ -27,8 +27,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <span class="text-xl font-bold">{{ config('app.name') }}</span>
+                    <a href="{{ url('/') }}" class="text-xl font-bold">
+                        {{ config('app.name') }}
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-8" aria-label="Main navigation">

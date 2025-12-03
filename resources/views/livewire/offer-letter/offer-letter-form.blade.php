@@ -477,6 +477,7 @@
                                 aria-invalid="{{ $errors->has('wage') ? 'true' : 'false' }}"
                                 aria-describedby="wage-prefix{{ $errors->has('wage') ? ' wage-error' : '' }}"
                                 class="w-full pl-8 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 focus:ring-2 @error('wage') border-red-500 @enderror"
+                                x-on:blur="if ($el.value && !isNaN(parseFloat($el.value))) $el.value = parseFloat($el.value).toFixed(2)"
                             >
                             <span id="wage-prefix" class="sr-only">Dollar amount in USD</span>
                         </div>

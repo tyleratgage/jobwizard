@@ -4,13 +4,6 @@
             @include('livewire.ejd.partials._preview')
         @else
             <form wire:submit="generateForm" class="space-y-8">
-                {{-- Header --}}
-                <div class="text-center">
-                    <h1 class="text-3xl font-bold text-gray-900">
-                        Employer's Job Description
-                    </h1>
-                    <p class="mt-2 text-gray-600">Light Duty / Transitional</p>
-                </div>
 
                 {{-- Honeypot --}}
                 <div class="hidden" aria-hidden="true">
