@@ -27,6 +27,15 @@
             border-bottom: 2px solid #000;
             padding-bottom: 10px;
             margin-bottom: 10px;
+            position: relative;
+        }
+        .wa-seal {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75px;
+            height: 75px;
         }
         .header-left {
             font-size: 9pt;
@@ -172,6 +181,7 @@
     <div class="container">
         {{-- Header --}}
         <div class="header">
+            <img src="{{ public_path('images/wa_seal.png') }}" class="wa-seal" alt="Washington State Seal">
             <div class="header-left">
                 <div>Department of Labor and Industries</div>
                 <div class="bold">Physician Billing codes</div>

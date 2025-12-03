@@ -62,10 +62,7 @@
                                    value="{{ $task->id }}"
                                    wire:model.live="tasks"
                                    class="h-4 w-4 mt-0.5 text-green-600 border-gray-300 rounded focus:ring-green-500">
-                            <span class="ml-3">
-                                <span class="block text-sm font-medium text-gray-700">{{ $task->name }}</span>
-                                <span class="block text-xs text-gray-500">{{ $task->code }}</span>
-                            </span>
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ $task->name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -79,10 +76,7 @@
                                    value="{{ $task->id }}"
                                    wire:model.live="tasks"
                                    class="h-4 w-4 mt-0.5 text-green-600 border-gray-300 rounded focus:ring-green-500">
-                            <span class="ml-3">
-                                <span class="block text-sm font-medium text-gray-700">{{ $task->name }}</span>
-                                <span class="block text-xs text-gray-500">{{ $task->code }}</span>
-                            </span>
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ $task->name }}</span>
                         </label>
                     @endforeach
                 </div>
