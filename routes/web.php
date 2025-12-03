@@ -13,3 +13,6 @@ Route::get('/ejd', EjdForm::class)->name('ejd.form');
 
 // Offer Letter Routes
 Route::get('/offer-letter', OfferLetterForm::class)->name('offer-letter.form');
+
+// Privacy Policy
+Route::view('/privacy', 'privacy')->name('privacy');

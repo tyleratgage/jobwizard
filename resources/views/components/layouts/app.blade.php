@@ -79,7 +79,10 @@
         <!-- Funding Text - Dark Background -->
         <div class="bg-footer py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-gray-400">Funding and support for the SMART / MBA Return to Work grant has been provided by the State of Washington, Department of Labor and Industries, Safety and Health Investments Project.</p>
+                <p class="text-center text-sm text-gray-400">Funding and support for the SMART / MBA Return to Work grant has been provided by the State of Washington, Department of Labor and Industries, Safety and Health Investment Projects.</p>
+                <p class="text-center text-sm text-gray-500 mt-3">
+                    <a href="{{ route('privacy') }}" class="hover:text-gray-300 transition-colors">Privacy Policy</a>
+                </p>
             </div>
         </div>
     </footer>
