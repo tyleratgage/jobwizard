@@ -4,69 +4,17 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Simple JSON file-based storage for form presets.
+ * Database-backed storage for form presets.
  *
- * Stores presets outside web root in a single JSON file.
- * Designed for low-volume usage (dozens of presets, light traffic).
+ * Stores presets in the form_presets table with JSON data column.
  */
 class PresetStorage
 {
-    protected string $storagePath;
-
-    public function __construct()
-    {
-        // Store outside web root, one level up from the Laravel app
-        $this->storagePath = dirname(base_path()) . '/ejd-storage';
-    }
-
-    /**
-     * Get the full path to the presets JSON file.
-     */
-    protected function getFilePath(): string
-    {
-        return $this->storagePath . '/form-presets.json';
-    }
-
-    /**
-     * Ensure storage directory and file exist.
-     */
-    protected function ensureStorageExists(): void
-    {
-        if (!is_dir($this->storagePath)) {
-            mkdir($this->storagePath, 0755, true);
-        }
-
-        if (!file_exists($this->getFilePath())) {
-            file_put_contents($this->getFilePath(), '{}');
-        }
-    }
-
-    /**
-     * Load all presets from file.
-     */
-    protected function loadAll(): array
-    {
-        $this->ensureStorageExists();
-
-        $content = file_get_contents($this->getFilePath());
-        return json_decode($content, true) ?: [];
-    }
-
-    /**
-     * Save all presets to file.
-     */
-    protected function saveAll(array $presets): void
-    {
-        $this->ensureStorageExists();
-
-        file_put_contents(
-            $this->getFilePath(),
-            json_encode($presets, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
-    }
+    protected string $table = 'form_presets';
 
     /**
      * Generate a unique 8-character token.
@@ -85,8 +33,7 @@ class PresetStorage
      */
     public function exists(string $token): bool
     {
-        $presets = $this->loadAll();
-        return isset($presets[$token]);
+        return DB::table($this->table)->where('token', $token)->exists();
     }
 
     /**
@@ -99,23 +46,29 @@ class PresetStorage
      */
     public function save(string $type, array $data, ?string $token = null): string
     {
-        $presets = $this->loadAll();
+        $now = now();
 
-        // Use existing token or generate new one
-        if ($token && isset($presets[$token])) {
+        if ($token && $this->exists($token)) {
             // Update existing
+            DB::table($this->table)
+                ->where('token', $token)
+                ->update([
+                    'type' => $type,
+                    'data' => json_encode($data),
+                    'updated_at' => $now,
+                ]);
         } else {
+            // Create new
             $token = $this->generateToken();
+
+            DB::table($this->table)->insert([
+                'token' => $token,
+                'type' => $type,
+                'data' => json_encode($data),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
         }
-
-        $presets[$token] = [
-            'type' => $type,
-            'created' => now()->toIso8601String(),
-            'updated' => now()->toIso8601String(),
-            'data' => $data,
-        ];
-
-        $this->saveAll($presets);
 
         return $token;
     }
@@ -128,13 +81,20 @@ class PresetStorage
      */
     public function load(string $token): ?array
     {
-        $presets = $this->loadAll();
+        $preset = DB::table($this->table)
+            ->where('token', $token)
+            ->first();
 
-        if (!isset($presets[$token])) {
+        if (!$preset) {
             return null;
         }
 
-        return $presets[$token];
+        return [
+            'type' => $preset->type,
+            'created' => $preset->created_at,
+            'updated' => $preset->updated_at,
+            'data' => json_decode($preset->data, true),
+        ];
     }
 
     /**
@@ -142,16 +102,11 @@ class PresetStorage
      */
     public function delete(string $token): bool
     {
-        $presets = $this->loadAll();
+        $deleted = DB::table($this->table)
+            ->where('token', $token)
+            ->delete();
 
-        if (!isset($presets[$token])) {
-            return false;
-        }
-
-        unset($presets[$token]);
-        $this->saveAll($presets);
-
-        return true;
+        return $deleted > 0;
     }
 
     /**
@@ -159,8 +114,20 @@ class PresetStorage
      */
     public function getAllByType(string $type): array
     {
-        $presets = $this->loadAll();
+        $presets = DB::table($this->table)
+            ->where('type', $type)
+            ->get();
 
-        return array_filter($presets, fn($preset) => $preset['type'] === $type);
+        $result = [];
+        foreach ($presets as $preset) {
+            $result[$preset->token] = [
+                'type' => $preset->type,
+                'created' => $preset->created_at,
+                'updated' => $preset->updated_at,
+                'data' => json_decode($preset->data, true),
+            ];
+        }
+
+        return $result;
     }
 }
