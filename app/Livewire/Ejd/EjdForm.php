@@ -7,12 +7,14 @@ namespace App\Livewire\Ejd;
 use App\Enums\JobLocation;
 use App\Models\Job;
 use App\Models\Task;
+use App\Services\EjdPdfService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Single-page EJD Form Component.
@@ -501,6 +503,58 @@ class EjdForm extends Component
     public function getFrequencyLetter(int $value): string
     {
         return self::FREQUENCY_OPTIONS[$value] ?? 'N';
+    }
+
+    /**
+     * Download the form as PDF.
+     */
+    public function downloadPdf(): StreamedResponse
+    {
+        $this->validate();
+
+        // Build frequency letters array
+        $frequencyLetters = [];
+        foreach ($this->frequencies as $key => $value) {
+            $frequencyLetters[$key] = $this->getFrequencyLetter($value);
+        }
+
+        $data = [
+            'workerName' => $this->workerName,
+            'claimNo' => $this->claimNo,
+            'employer' => $this->employer,
+            'jobTitleDisplay' => $this->jobTitleDisplay,
+            'phone' => $this->phone,
+            'hrPerDay' => $this->hrPerDay,
+            'daysWkPerShift' => $this->daysWkPerShift,
+            'title' => $this->title,
+            'date' => $this->date,
+            'tasksDisplay' => $this->tasksDisplay,
+            'toolsEquipment' => $this->toolsEquipment,
+            'newTask' => $this->newTask,
+            'physicalDemands' => self::PHYSICAL_DEMANDS,
+            'liftingDemands' => self::LIFTING_DEMANDS,
+            'frequencies' => $this->frequencies,
+            'frequencyLetters' => $frequencyLetters,
+            'descriptions' => $this->descriptions,
+            'lbsValues' => [
+                'lift' => $this->lbsLift,
+                'carry' => $this->lbsCarry,
+                'push' => $this->lbsPush,
+            ],
+        ];
+
+        $pdfService = new EjdPdfService();
+        $pdfContent = $pdfService->generate($data);
+
+        $filename = 'EJD_'.str_replace(' ', '_', $this->workerName).'_'.date('Y-m-d').'.pdf';
+
+        return response()->streamDownload(
+            fn () => print($pdfContent),
+            $filename,
+            [
+                'Content-Type' => 'application/pdf',
+            ]
+        );
     }
 
     /**

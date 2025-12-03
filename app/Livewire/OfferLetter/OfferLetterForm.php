@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\OfferLetter;
 
+use App\Services\OfferLetterPdfService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
@@ -11,6 +12,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Offer Letter Form Component.
@@ -354,6 +356,29 @@ class OfferLetterForm extends Component
         $this->reset();
         $this->mount();
         $this->showPreview = false;
+    }
+
+    /**
+     * Download the letter as PDF.
+     */
+    public function downloadPdf(): StreamedResponse
+    {
+        $this->validate();
+
+        $templateName = "{$this->language}-{$this->jobType}";
+
+        $pdfService = new OfferLetterPdfService();
+        $pdfContent = $pdfService->generate($templateName, $this->templateData);
+
+        $filename = 'OfferLetter_'.str_replace(' ', '_', $this->lastName).'_'.date('Y-m-d').'.pdf';
+
+        return response()->streamDownload(
+            fn () => print($pdfContent),
+            $filename,
+            [
+                'Content-Type' => 'application/pdf',
+            ]
+        );
     }
 
     /**

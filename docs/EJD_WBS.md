@@ -20,43 +20,38 @@ This WBS outlines the complete rebuild of the legacy EJD application from a mult
 
 ## 🚀 Next Steps (Pick Up Here)
 
-**Last Updated:** November 30, 2025
-**Current Status:** M1 ✅ | M2 ✅ | M3 ✅ (Single-page form complete) | M4 🔄 (75% complete) | M5 ☐
+**Last Updated:** December 2, 2025
+**Current Status:** M1 ✅ | M2 ✅ | M3 ✅ | M4 ✅ (PDF generation complete) | M5 🔄
 
 **Live URLs:**
-- EJD Form (Legacy Wizard): https://ejd.gagedesign.com/ejd
-- EJD Form (New Single-Page): https://ejd.gagedesign.com/ejd-new
+- EJD Form: https://ejd.gagedesign.com/ejd
 - Offer Letter: https://ejd.gagedesign.com/offer-letter
 
 **Architecture Change:** Per Change Order #001 (implemented), the EJD form was rebuilt as a single-page reactive form instead of a 5-step wizard. See `docs/legacy_templates/CHANGE_ORDER_001.md` for details.
 
-### Option A: Finalize EJD Form Cutover
-The new single-page EJD form at `/ejd-new` is ready for review. Next steps:
-1. Review and test at `/ejd-new`
-2. Make any final adjustments
-3. Switch `/ejd` route to use `EjdForm` component
-4. Archive/delete wizard files
+### Option A: Quality Assurance & Testing
+Both forms are feature-complete with PDF generation. Next steps:
+1. Run accessibility audits (5.1.1-5.1.10)
+2. Cross-browser testing (5.2.1-5.2.5)
+3. Mobile responsive testing (5.3.1-5.3.6)
+4. Write component tests (3.6.1-3.6.2, 4.2.13)
 
-### Option B: Complete M4 Offer Letter System
-Template migration and form complete (4.1.1-4.1.8, 4.2.1-4.2.12). Next steps:
-1. Write component tests (4.2.13)
-2. PDF generation service (4.3.1-4.3.10) - shares Browsershot with EJD
+### Option B: Polish & Enhancements
+- Searchable job dropdown (3.2.9)
+- Keyboard navigation enhancements (3.2.10)
+- Analytics tracking (3.6.3, 4.3.9)
 
-### Option C: Install Browsershot (Enables PDF for both forms)
-Install Browsershot and enable PDF generation:
-1. Install Chromium/Puppeteer (WBS 1.1.7)
-2. Install Spatie Browsershot package (WBS 1.2.7)
-3. Integrate PDF generation (WBS 3.5.1-3.5.4, 4.3.1-4.3.10)
-
-### Option D: Polish & Testing
-- Searchable job dropdown (3.2.2)
-- Keyboard navigation enhancements (3.2.6)
-- Component tests (3.4.1-3.4.3)
-- Analytics tracking (3.4.4-3.4.5)
+### Option C: Deployment Preparation
+- Production environment setup (5.7.1-5.7.12)
+- Documentation (1.3.3-1.3.4)
 
 ### Recent Milestones Completed
+- ✅ **PDF Generation**: Browsershot + Puppeteer installed, PDF download working for both forms
+- ✅ **Offer Letter PDF**: All 6 templates (EN/ES/RU × Permanent/Temporary) with UTF-8 support
+- ✅ **EJD Form PDF**: Matching legacy layout with physical demands table
 - ✅ **Change Order #001 Implemented**: Single-page EJD form replaces 5-step wizard
 - ✅ Phone number auto-formatting on EJD and Offer Letter forms
+- ✅ Dollar amount auto-formatting (2 decimal places) on Offer Letter
 - ✅ Accessibility features added to Offer Letter form (4.2.12)
 - ✅ Reactive form with location→jobs→tasks→demands cascade
 
@@ -93,7 +88,7 @@ Install Browsershot and enable PDF generation:
 | 1.1.4 | Install/verify Node.js 18+ and npm | ☑ |
 | 1.1.5 | Configure subdomain (ejd.gagedesign.com) | ☑ |
 | 1.1.6 | Set up SSL certificate for new subdomain | ☑ |
-| 1.1.7 | Install Chromium/Puppeteer for PDF generation | ☐ |
+| 1.1.7 | Install Chromium/Puppeteer for PDF generation | ☑ |
 
 #### 1.2 Project Initialization
 | ID | Task | Status |
@@ -104,7 +99,7 @@ Install Browsershot and enable PDF generation:
 | 1.2.4 | Install TailwindCSS 4.x via Vite | ☑ |
 | 1.2.5 | Install Livewire 3.x | ☑ |
 | 1.2.6 | Install Alpine.js (bundled with Livewire) | ☑ |
-| 1.2.7 | Install Spatie Browsershot package | ☐ |
+| 1.2.7 | Install Spatie Browsershot package | ☑ |
 | 1.2.8 | Configure database connection | ☑ |
 | 1.2.9 | Set up basic application layout template | ☑ |
 
@@ -227,13 +222,13 @@ Install Browsershot and enable PDF generation:
 | 3.4.4 | Create print stylesheet | ☑ |
 | 3.4.5 | Add "Edit Form" button from preview | ☑ |
 
-#### 3.5 PDF Generation (Pending Browsershot)
+#### 3.5 PDF Generation
 | ID | Task | Status |
 |----|------|--------|
-| 3.5.1 | Create `EjdPdfService` class | ☐ |
-| 3.5.2 | Configure Browsershot for PDF generation | ☐ |
-| 3.5.3 | Add "Download PDF" button | ☐ |
-| 3.5.4 | Test PDF output quality | ☐ |
+| 3.5.1 | Create `EjdPdfService` class | ☑ |
+| 3.5.2 | Configure Browsershot for PDF generation | ☑ |
+| 3.5.3 | Add "Download PDF" button | ☑ |
+| 3.5.4 | Test PDF output quality | ☑ |
 
 #### 3.6 Testing & Analytics
 | ID | Task | Status |
@@ -298,18 +293,27 @@ Install Browsershot and enable PDF generation:
 #### 4.3 PDF Generation Service
 | ID | Task | Status |
 |----|------|--------|
-| 4.3.1 | Create `OfferLetterPdfService` class | ☐ |
-| 4.3.2 | Configure Browsershot for PDF generation | ☐ |
-| 4.3.3 | Set up PDF page size and margins | ☐ |
-| 4.3.4 | Implement template rendering with data | ☐ |
-| 4.3.5 | Implement PDF download response | ☐ |
-| 4.3.6 | Add browser preview functionality | ☐ |
-| 4.3.7 | Test PDF output for all 6 template combinations | ☐ |
-| 4.3.8 | Verify character encoding for Spanish/Russian | ☐ |
+| 4.3.1 | Create `OfferLetterPdfService` class | ☑ |
+| 4.3.2 | Configure Browsershot for PDF generation | ☑ |
+| 4.3.3 | Set up PDF page size and margins | ☑ |
+| 4.3.4 | Implement template rendering with data | ☑ |
+| 4.3.5 | Implement PDF download response | ☑ |
+| 4.3.6 | Add browser preview functionality | ☑ |
+| 4.3.7 | Test PDF output for all 6 template combinations | ☑ |
+| 4.3.8 | Verify character encoding for Spanish/Russian | ☑ |
 | 4.3.9 | Log offer letter generation for analytics | ☐ |
 | 4.3.10 | Write service tests | ☐ |
 
 **🎯 Milestone M4 Deliverable:** Working offer letter system with PDF generation for all languages/types
+
+**✅ MILESTONE M4 COMPLETE** (2025-12-02)
+- Browsershot + Puppeteer installed for server-side PDF generation
+- `PdfService` base class with shared Browsershot configuration
+- `EjdPdfService` generates EJD form PDFs matching legacy layout
+- `OfferLetterPdfService` generates offer letter PDFs
+- All 6 template combinations tested (EN/ES/RU × Permanent/Temporary)
+- UTF-8 character encoding verified for Russian/Spanish
+- Download PDF buttons added to both form previews
 
 ---
 
