@@ -38,7 +38,8 @@ Single-page reactive form built with Livewire. Located at:
 | Date | Yes | |
 | Location | Yes | Office/Yard/Job Site |
 | Hours/Days | Yes | |
-| Job Title(s) | Yes | Multi-select |
+| Job Title(s) | Yes | Multi-select from database |
+| Job Title for Output | Yes | Editable, prepopulated from selection |
 | Tasks | Yes | Multi-select |
 
 ## Tech Stack

@@ -66,10 +66,19 @@
             </div>
 
             @if(count($jobTitle) > 0)
-                <div class="mt-4 p-3 bg-green-50 rounded-lg">
-                    <p class="text-sm text-green-700">
-                        <strong>Selected:</strong> {{ $this->selectedJobs->pluck('name')->implode(', ') }}
-                    </p>
+                <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <label for="customJobTitle" class="block text-sm font-medium text-green-800 mb-2">
+                        Job Title for Output <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text"
+                           id="customJobTitle"
+                           wire:model="customJobTitle"
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 @error('customJobTitle') border-red-500 @enderror"
+                           placeholder="Edit job title as needed for the form output">
+                    <p class="mt-1 text-xs text-green-600">Prepopulated from selected jobs. Edit as needed.</p>
+                    @error('customJobTitle')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
             @endif
         @endif

@@ -132,6 +132,9 @@ class EjdForm extends Component
     // Section 3: Job Selection (multi-select)
     public array $jobTitle = [];
 
+    // Custom job title (editable, prepopulated from selected jobs)
+    public string $customJobTitle = '';
+
     // Section 4: Tasks
     public array $tasks = [];
 
@@ -213,6 +216,7 @@ class EjdForm extends Component
         $this->hrPerDay = $data['hrPerDay'] ?? 0;
         $this->daysWkPerShift = $data['daysWkPerShift'] ?? 0;
         $this->jobTitle = $data['jobTitle'] ?? [];
+        $this->customJobTitle = $data['customJobTitle'] ?? '';
         $this->tasks = $data['tasks'] ?? [];
         $this->newTask = $data['newTask'] ?? '';
         $this->toolsEquipment = $data['toolsEquipment'] ?? '';
@@ -258,6 +262,7 @@ class EjdForm extends Component
             'hrPerDay' => $this->hrPerDay,
             'daysWkPerShift' => $this->daysWkPerShift,
             'jobTitle' => $this->jobTitle,
+            'customJobTitle' => $this->customJobTitle,
             'tasks' => $this->tasks,
             'newTask' => $this->newTask,
             'toolsEquipment' => $this->toolsEquipment,
@@ -294,7 +299,7 @@ class EjdForm extends Component
     {
         $this->reset([
             'employer', 'phone', 'fax', 'title', 'workerName', 'claimNo',
-            'location', 'hrPerDay', 'daysWkPerShift', 'jobTitle',
+            'location', 'hrPerDay', 'daysWkPerShift', 'jobTitle', 'customJobTitle',
             'tasks', 'newTask', 'toolsEquipment', 'lbsLift', 'lbsCarry', 'lbsPush',
             'presetToken', 'hasActivePreset', 'showPreview',
         ]);
@@ -413,19 +418,23 @@ class EjdForm extends Component
     public function updatedLocation(): void
     {
         $this->jobTitle = [];
+        $this->customJobTitle = '';
         $this->tasks = [];
         $this->toolsEquipment = '';
         $this->initializeFrequencies();
     }
 
     /**
-     * Handle job selection change - reset tasks and recalculate.
+     * Handle job selection change - reset tasks, recalculate, and update custom title.
      */
     public function updatedJobTitle(): void
     {
         $this->tasks = [];
         $this->toolsEquipment = '';
         $this->initializeFrequencies();
+
+        // Prepopulate custom job title from selected jobs
+        $this->customJobTitle = $this->selectedJobs->pluck('name')->implode(', ');
     }
 
     /**
@@ -563,6 +572,7 @@ class EjdForm extends Component
             'daysWkPerShift' => 'required|integer|min:1|max:5',
             'jobTitle' => 'required|array|min:1',
             'jobTitle.*' => 'integer|exists:ejd_jobs,id',
+            'customJobTitle' => 'required|string|max:255',
             'tasks' => 'required|array|min:1',
             'tasks.*' => 'integer|exists:ejd_tasks,id',
             'toolsEquipment' => 'required|string',
@@ -593,6 +603,7 @@ class EjdForm extends Component
             'daysWkPerShift.min' => 'Days per week must be at least 1.',
             'jobTitle.required' => 'Please select at least one job title.',
             'jobTitle.min' => 'Please select at least one job title.',
+            'customJobTitle.required' => 'Job title for output is required.',
             'tasks.required' => 'Please select at least one task.',
             'tasks.min' => 'Please select at least one task.',
             'toolsEquipment.required' => 'Equipment and tools is required.',
@@ -677,7 +688,7 @@ class EjdForm extends Component
             'workerName' => $this->workerName,
             'claimNo' => $this->claimNo,
             'employer' => $this->employer,
-            'jobTitleDisplay' => $this->jobTitleDisplay,
+            'jobTitleDisplay' => $this->customJobTitle ?: $this->jobTitleDisplay,
             'phone' => $this->phone,
             'fax' => $this->fax,
             'hrPerDay' => $this->hrPerDay,

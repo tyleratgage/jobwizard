@@ -80,7 +80,7 @@
                     </div>
                     <div class="w-1/2 p-2">
                         <span class="text-xs font-bold">Job Title:</span>
-                        <span class="text-sm ml-2">{{ $this->jobTitleDisplay }}</span>
+                        <span class="text-sm ml-2">{{ $customJobTitle ?: $this->jobTitleDisplay }}</span>
                     </div>
                 </div>
 
