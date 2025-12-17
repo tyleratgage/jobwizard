@@ -720,7 +720,12 @@ class EjdForm extends Component
             'created_at' => now(),
         ]);
 
-        $filename = 'EJD_'.str_replace(' ', '_', $this->workerName).'_'.date('Y-m-d').'.pdf';
+        // Sanitize job title: remove special chars except dashes, replace spaces with dashes
+        $jobTitle = $this->customJobTitle ?: $this->jobTitleDisplay;
+        $sanitizedTitle = preg_replace('/[^a-zA-Z0-9\-]/', '', str_replace(' ', '-', $jobTitle));
+        $sanitizedTitle = preg_replace('/-+/', '-', $sanitizedTitle); // collapse multiple dashes
+        $sanitizedTitle = trim($sanitizedTitle, '-');
+        $filename = $sanitizedTitle . '-' . date('mdY') . '.pdf';
 
         return response()->streamDownload(
             fn () => print($pdfContent),
