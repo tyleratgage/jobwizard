@@ -84,13 +84,21 @@
                     </div>
                 </div>
 
-                {{-- Row 3: Phone / Hours & Days --}}
+                {{-- Row 3: Phone / Fax --}}
                 <div class="flex border-b border-black">
                     <div class="w-1/2 p-2 border-r border-black">
                         <span class="text-xs font-bold">Phone #:</span>
                         <span class="text-sm ml-2">{{ $phone }}</span>
                     </div>
-                    <div class="w-1/2 p-2 flex">
+                    <div class="w-1/2 p-2">
+                        <span class="text-xs font-bold">Fax #:</span>
+                        <span class="text-sm ml-2">{{ $fax ?: '—' }}</span>
+                    </div>
+                </div>
+
+                {{-- Row 4: Hours & Days --}}
+                <div class="flex border-b border-black">
+                    <div class="w-1/2 p-2 border-r border-black flex">
                         <div class="w-1/2">
                             <span class="text-xs font-bold">Hours per day:</span>
                             <span class="text-sm ml-1">{{ $hrPerDay }}</span>
@@ -99,6 +107,9 @@
                             <span class="text-xs font-bold">Days per week:</span>
                             <span class="text-sm ml-1">{{ $daysWkPerShift }}</span>
                         </div>
+                    </div>
+                    <div class="w-1/2 p-2">
+                        {{-- Empty for layout balance --}}
                     </div>
                 </div>
 

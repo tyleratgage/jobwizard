@@ -225,11 +225,20 @@
                     <span class="value">{{ $phone }}</span>
                 </td>
                 <td>
+                    <span class="label">Fax #:</span>
+                    <span class="value">{{ $fax ?: '—' }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right: 1px solid #000;">
                     <span class="label">Hours per day:</span>
                     <span class="value">{{ $hrPerDay }}</span>
                     &nbsp;&nbsp;&nbsp;
                     <span class="label">Days per week:</span>
                     <span class="value">{{ $daysWkPerShift }}</span>
+                </td>
+                <td>
+                    {{-- Empty for layout balance --}}
                 </td>
             </tr>
             <tr>

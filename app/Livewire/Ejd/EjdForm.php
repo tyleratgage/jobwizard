@@ -112,6 +112,8 @@ class EjdForm extends Component
 
     public string $phone = '';
 
+    public string $fax = '';
+
     public string $title = '';
 
     public string $workerName = '';
@@ -202,6 +204,7 @@ class EjdForm extends Component
     {
         $this->employer = $data['employer'] ?? '';
         $this->phone = $data['phone'] ?? '';
+        $this->fax = $data['fax'] ?? '';
         $this->title = $data['title'] ?? '';
         $this->workerName = $data['workerName'] ?? '';
         $this->claimNo = $data['claimNo'] ?? '';
@@ -246,6 +249,7 @@ class EjdForm extends Component
         return [
             'employer' => $this->employer,
             'phone' => $this->phone,
+            'fax' => $this->fax,
             'title' => $this->title,
             'workerName' => $this->workerName,
             'claimNo' => $this->claimNo,
@@ -289,7 +293,7 @@ class EjdForm extends Component
     public function clearForm(): void
     {
         $this->reset([
-            'employer', 'phone', 'title', 'workerName', 'claimNo',
+            'employer', 'phone', 'fax', 'title', 'workerName', 'claimNo',
             'location', 'hrPerDay', 'daysWkPerShift', 'jobTitle',
             'tasks', 'newTask', 'toolsEquipment', 'lbsLift', 'lbsCarry', 'lbsPush',
             'presetToken', 'hasActivePreset', 'showPreview',
@@ -509,20 +513,35 @@ class EjdForm extends Component
      */
     public function updatedPhone(): void
     {
+        $this->phone = $this->formatPhoneNumber($this->phone);
+    }
+
+    /**
+     * Format fax number as user types.
+     */
+    public function updatedFax(): void
+    {
+        $this->fax = $this->formatPhoneNumber($this->fax);
+    }
+
+    /**
+     * Format a phone/fax number string.
+     */
+    protected function formatPhoneNumber(string $value): string
+    {
         // Remove all non-digits
-        $digits = preg_replace('/\D/', '', $this->phone);
+        $digits = preg_replace('/\D/', '', $value);
 
         // Format as xxx-xxx-xxxx
         if (strlen($digits) >= 10) {
             $digits = substr($digits, 0, 10);
-            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6, 4);
+            return substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6, 4);
         } elseif (strlen($digits) >= 6) {
-            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6);
+            return substr($digits, 0, 3).'-'.substr($digits, 3, 3).'-'.substr($digits, 6);
         } elseif (strlen($digits) >= 3) {
-            $this->phone = substr($digits, 0, 3).'-'.substr($digits, 3);
-        } else {
-            $this->phone = $digits;
+            return substr($digits, 0, 3).'-'.substr($digits, 3);
         }
+        return $digits;
     }
 
     /**
@@ -534,6 +553,7 @@ class EjdForm extends Component
             'mycompany' => 'size:0',
             'employer' => 'required|string|max:255',
             'phone' => ['required', 'regex:/^\d{3}-\d{3}-\d{4}$/'],
+            'fax' => ['nullable', 'regex:/^\d{3}-\d{3}-\d{4}$/'],
             'title' => 'required|string|max:255',
             'workerName' => 'required|string|max:255',
             'claimNo' => 'nullable|string|max:50',
@@ -635,9 +655,9 @@ class EjdForm extends Component
     /**
      * Get frequency letter for display.
      */
-    public function getFrequencyLetter(int $value): string
+    public function getFrequencyLetter(int|string $value): string
     {
-        return self::FREQUENCY_OPTIONS[$value] ?? 'N';
+        return self::FREQUENCY_OPTIONS[(int) $value] ?? 'N';
     }
 
     /**
@@ -659,6 +679,7 @@ class EjdForm extends Component
             'employer' => $this->employer,
             'jobTitleDisplay' => $this->jobTitleDisplay,
             'phone' => $this->phone,
+            'fax' => $this->fax,
             'hrPerDay' => $this->hrPerDay,
             'daysWkPerShift' => $this->daysWkPerShift,
             'title' => $this->title,

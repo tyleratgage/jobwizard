@@ -42,6 +42,22 @@
                     @enderror
                 </div>
 
+                {{-- Fax --}}
+                <div>
+                    <label for="fax" class="block text-sm font-medium text-gray-700">
+                        Fax #
+                    </label>
+                    <input type="tel"
+                           id="fax"
+                           wire:model.live.debounce.300ms="fax"
+                           placeholder="xxx-xxx-xxxx"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ejd-400 focus:ring-ejd-400 @error('fax') border-red-500 @enderror">
+                    <p class="mt-1 text-xs text-gray-500">For provider to send completed form</p>
+                    @error('fax')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Title --}}
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700">
