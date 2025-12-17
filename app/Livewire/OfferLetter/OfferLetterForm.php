@@ -380,6 +380,18 @@ class OfferLetterForm extends Component
     }
 
     /**
+     * Format time from 24-hour to 12-hour AM/PM format.
+     */
+    protected function formatTimeAmPm(string $time): string
+    {
+        if (empty($time)) {
+            return '';
+        }
+
+        return Carbon::createFromFormat('H:i', $time)->format('g:i A');
+    }
+
+    /**
      * Get template data for rendering.
      *
      * @return array<string, mixed>
@@ -398,8 +410,8 @@ class OfferLetterForm extends Component
             'zip' => $this->zip,
             'claim_no' => $this->claimNo,
             'work_date' => $this->workDate ? Carbon::parse($this->workDate)->format('F j, Y') : '',
-            'start_time' => $this->startTime,
-            'end_time' => $this->endTime,
+            'start_time' => $this->formatTimeAmPm($this->startTime),
+            'end_time' => $this->formatTimeAmPm($this->endTime),
             'hours_per_week' => $this->hoursPerWeek,
             'days_of_the_week' => $this->formattedDaysOfWeek,
             'wage' => $this->wage,

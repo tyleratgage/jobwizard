@@ -1,13 +1,5 @@
 {{-- Russian Permanent Offer Letter Template --}}
 
-<p class="offer-letter-header-info print-only">
-    Предложение о работе "Вернуться к работе", страница 1<br>
-    Имя сотрудника: {{ $first_name }} {{ $last_name }}<br>
-    № претензии L&I: {{ $claim_no }}
-</p>
-
-<br>
-
 <strong>(На фирменном бланке; доставить лично или заказным письмом с уведомлением о вручении)</strong>
 
 <p>&nbsp;</p>
@@ -61,16 +53,6 @@
 <p>&nbsp;</p>
 
 <p class="page-break-after">{{ $valediction }}</p>
-
-<br>
-
-<p class="offer-letter-header-info print-only">
-    Предложение о работе "Вернуться к работе", страница 2<br>
-    Имя сотрудника: {{ $first_name }} {{ $last_name }}<br>
-    № претензии L&I: {{ $claim_no }}
-</p>
-
-<br><br>
 
 <p>
     Да ___, принимаю предложенную должность и явлюсь на работу.<br>

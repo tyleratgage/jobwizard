@@ -1,13 +1,5 @@
 {{-- English Permanent Offer Letter Template --}}
 
-<p class="offer-letter-header-info print-only">
-    Return to Work Job Offer, page 1<br>
-    Injured Employee Name: {{ $first_name }} {{ $last_name }}<br>
-    L&I Claim No.: {{ $claim_no }}
-</p>
-
-<br>
-
 <strong>(On company letterhead; deliver in-person or via certified mail with return receipt)</strong>
 
 <p>&nbsp;</p>
@@ -61,16 +53,6 @@
 <p>&nbsp;</p>
 
 <p class="page-break-after">{{ $valediction }}</p>
-
-<br>
-
-<p class="offer-letter-header-info print-only">
-    Return to Work Job Offer, page 2<br>
-    Injured Employee Name: {{ $first_name }} {{ $last_name }}<br>
-    L&I Claim No.: {{ $claim_no }}
-</p>
-
-<br><br><br><br>
 
 <p>
     Yes ___, I accept the offered position and will report to work.<br>

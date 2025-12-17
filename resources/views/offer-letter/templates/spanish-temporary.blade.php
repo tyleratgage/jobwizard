@@ -1,13 +1,5 @@
 {{-- Spanish Temporary/Transitional Offer Letter Template --}}
 
-<p class="offer-letter-header-info print-only">
-    Oferta de Trabajo/ Retorno al trabajo, página 1<br>
-    Nombre del empleado lesionado: {{ $first_name }} {{ $last_name }}<br>
-    Número de reclamo L&I.: {{ $claim_no }}
-</p>
-
-<br>
-
 <strong>(On company letterhead; deliver in-person or via certified mail with return receipt)</strong>
 
 <p>&nbsp;</p>
@@ -61,16 +53,6 @@
 <p>&nbsp;</p>
 
 <p class="page-break-after">{{ $valediction }}</p>
-
-<br>
-
-<p class="offer-letter-header-info print-only">
-    Oferta de Trabajo/ Retorno al trabajo, página 2<br>
-    Nombre del empleado lesionado: {{ $first_name }} {{ $last_name }}<br>
-    Número de reclamo L&I.: {{ $claim_no }}
-</p>
-
-<br><br>
 
 <p>
     Sí, ____, acepto la posición ofrecida y me presentaré a trabajar.<br>
