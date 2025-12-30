@@ -1,7 +1,7 @@
 <x-layouts.app title="Welcome">
     <div class="text-center py-12">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">
-            Employer's Job Description
+            Return to Work Washington
         </h1>
         <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Create job descriptions and return-to-work offer letters for Washington State L&I claims.
