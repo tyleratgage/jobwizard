@@ -95,3 +95,31 @@
 .text-shadow-dark {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.9);
 }
+
+/* Warm accent focus rings (Wheat) */
+input:focus, select:focus, textarea:focus {
+    --tw-ring-color: #f3e4aa !important;
+    border-color: #f3e4aa !important;
+}
+
+/* Accent checkboxes (Buttercup) */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    background-color: #f5a524 !important;
+    border-color: #f5a524 !important;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+    --tw-ring-color: #f3e4aa !important;
+}
+
+/* Link hover underline with Buttercup */
+a:hover {
+    text-decoration-color: #f5a524;
+}
+
+/* Section header style */
+.section-header {
+    /* Available for future styling */
+}

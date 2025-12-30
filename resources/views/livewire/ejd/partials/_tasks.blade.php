@@ -1,6 +1,6 @@
 {{-- Section 4: Tasks --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden {{ count($jobTitle) === 0 ? 'opacity-60' : '' }}" wire:key="tasks-{{ implode('-', $jobTitle) }}">
-    <div class="bg-slate-200 px-6 py-4">
+    <div class="section-header bg-slate-200 px-6 py-4">
         <h2 class="text-xl font-semibold text-slate-800 flex items-center">
             <span class="bg-white text-slate-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3 shadow-sm">4</span>
             Tasks

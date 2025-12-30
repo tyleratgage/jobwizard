@@ -26,7 +26,7 @@
     </a>
 
     <!-- Header -->
-    <header class="bg-header text-white shadow-lg">
+    <header class="bg-header text-white shadow-lg border-b-3 border-accent-400">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -62,7 +62,7 @@
     <!-- Footer -->
     <footer class="mt-auto print:hidden">
         <!-- Logos Row - White Background -->
-        <div class="bg-white py-8">
+        <div class="bg-white py-8 border-t-3 border-accent-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
                     <div>

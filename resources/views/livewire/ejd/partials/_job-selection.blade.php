@@ -1,6 +1,6 @@
 {{-- Section 3: Job Selection --}}
 <div class="bg-white shadow-sm rounded-lg overflow-hidden {{ !$location ? 'opacity-60' : '' }}" wire:key="job-selection-{{ $location }}">
-    <div class="bg-slate-200 px-6 py-4">
+    <div class="section-header bg-slate-200 px-6 py-4">
         <h2 class="text-xl font-semibold text-slate-800 flex items-center">
             <span class="bg-white text-slate-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3 shadow-sm">3</span>
             Choose Job Title
@@ -40,11 +40,11 @@
                 <div class="space-y-2">
                     @foreach($leftJobs as $job)
                         <label class="flex items-start p-3 border rounded-lg cursor-pointer transition-colors
-                                      {{ in_array($job->id, $jobTitle) ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                      {{ in_array($job->id, $jobTitle) ? 'border-accent-400 bg-accent-50' : 'border-gray-200 hover:border-gray-300' }}">
                             <input type="checkbox"
                                    value="{{ $job->id }}"
                                    wire:model.live="jobTitle"
-                                   class="h-4 w-4 mt-0.5 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                   class="h-4 w-4 mt-0.5 border-gray-300 rounded">
                             <span class="ml-3 text-sm font-medium text-gray-700">{{ $job->name }}</span>
                         </label>
                     @endforeach
@@ -54,11 +54,11 @@
                 <div class="space-y-2">
                     @foreach($rightJobs as $job)
                         <label class="flex items-start p-3 border rounded-lg cursor-pointer transition-colors
-                                      {{ in_array($job->id, $jobTitle) ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                      {{ in_array($job->id, $jobTitle) ? 'border-accent-400 bg-accent-50' : 'border-gray-200 hover:border-gray-300' }}">
                             <input type="checkbox"
                                    value="{{ $job->id }}"
                                    wire:model.live="jobTitle"
-                                   class="h-4 w-4 mt-0.5 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                   class="h-4 w-4 mt-0.5 border-gray-300 rounded">
                             <span class="ml-3 text-sm font-medium text-gray-700">{{ $job->name }}</span>
                         </label>
                     @endforeach
@@ -66,16 +66,16 @@
             </div>
 
             @if(count($jobTitle) > 0)
-                <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <label for="customJobTitle" class="block text-sm font-medium text-green-800 mb-2">
+                <div class="mt-4 p-4 bg-accent-50 border border-accent-200 rounded-lg">
+                    <label for="customJobTitle" class="block text-sm font-medium text-accent-700 mb-2">
                         Job Title for Output <span class="text-red-500">*</span>
                     </label>
                     <input type="text"
                            id="customJobTitle"
                            wire:model="customJobTitle"
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 @error('customJobTitle') border-red-500 @enderror"
+                           class="w-full rounded-md border-gray-300 shadow-sm @error('customJobTitle') border-red-500 @enderror"
                            placeholder="Edit job title as needed for the form output">
-                    <p class="mt-1 text-xs text-green-600">Prepopulated from selected jobs. Edit as needed.</p>
+                    <p class="mt-1 text-xs text-accent-600">Prepopulated from selected jobs. Edit as needed.</p>
                     @error('customJobTitle')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
