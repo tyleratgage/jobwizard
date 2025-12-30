@@ -225,7 +225,7 @@
                     <span class="value">{{ $phone }}</span>
                 </td>
                 <td>
-                    <span class="label">Fax #:</span>
+                    <span class="label">Return Fax #:</span>
                     <span class="value">{{ $fax ?: '—' }}</span>
                 </td>
             </tr>
@@ -242,11 +242,15 @@
                 </td>
             </tr>
             <tr>
-                <td style="border-right: 1px solid #000;">
+                <td style="width: 34%; border-right: 1px solid #000;">
                     <span class="label">Employer Name (Please print):</span>
                     <div class="signature-line"></div>
                 </td>
-                <td>
+                <td style="width: 33%; border-right: 1px solid #000;">
+                    <span class="label">Completed By:</span>
+                    <span class="value">{{ $completedBy }}</span>
+                </td>
+                <td style="width: 33%;">
                     <span class="label">Title:</span>
                     <span class="value">{{ $title }}</span>
                 </td>

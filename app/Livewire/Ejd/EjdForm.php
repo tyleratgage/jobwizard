@@ -114,6 +114,8 @@ class EjdForm extends Component
 
     public string $fax = '';
 
+    public string $completedBy = '';
+
     public string $title = '';
 
     public string $workerName = '';
@@ -208,6 +210,7 @@ class EjdForm extends Component
         $this->employer = $data['employer'] ?? '';
         $this->phone = $data['phone'] ?? '';
         $this->fax = $data['fax'] ?? '';
+        $this->completedBy = $data['completedBy'] ?? '';
         $this->title = $data['title'] ?? '';
         $this->workerName = $data['workerName'] ?? '';
         $this->claimNo = $data['claimNo'] ?? '';
@@ -254,6 +257,7 @@ class EjdForm extends Component
             'employer' => $this->employer,
             'phone' => $this->phone,
             'fax' => $this->fax,
+            'completedBy' => $this->completedBy,
             'title' => $this->title,
             'workerName' => $this->workerName,
             'claimNo' => $this->claimNo,
@@ -298,7 +302,7 @@ class EjdForm extends Component
     public function clearForm(): void
     {
         $this->reset([
-            'employer', 'phone', 'fax', 'title', 'workerName', 'claimNo',
+            'employer', 'phone', 'fax', 'completedBy', 'title', 'workerName', 'claimNo',
             'location', 'hrPerDay', 'daysWkPerShift', 'jobTitle', 'customJobTitle',
             'tasks', 'newTask', 'toolsEquipment', 'lbsLift', 'lbsCarry', 'lbsPush',
             'presetToken', 'hasActivePreset', 'showPreview',
@@ -563,6 +567,7 @@ class EjdForm extends Component
             'employer' => 'required|string|max:255',
             'phone' => ['required', 'regex:/^\d{3}-\d{3}-\d{4}$/'],
             'fax' => ['nullable', 'regex:/^\d{3}-\d{3}-\d{4}$/'],
+            'completedBy' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'workerName' => 'required|string|max:255',
             'claimNo' => 'nullable|string|max:50',
@@ -593,6 +598,7 @@ class EjdForm extends Component
             'employer.required' => 'Employer name is required.',
             'phone.required' => 'Phone number is required.',
             'phone.regex' => 'Phone must be in format xxx-xxx-xxxx.',
+            'completedBy.required' => 'Completed by is required.',
             'title.required' => 'Title is required.',
             'workerName.required' => 'Worker name is required.',
             'date.required' => 'Date is required.',
@@ -691,6 +697,7 @@ class EjdForm extends Component
             'jobTitleDisplay' => $this->customJobTitle ?: $this->jobTitleDisplay,
             'phone' => $this->phone,
             'fax' => $this->fax,
+            'completedBy' => $this->completedBy,
             'hrPerDay' => $this->hrPerDay,
             'daysWkPerShift' => $this->daysWkPerShift,
             'title' => $this->title,

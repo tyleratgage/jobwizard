@@ -91,7 +91,7 @@
                         <span class="text-sm ml-2">{{ $phone }}</span>
                     </div>
                     <div class="w-1/2 p-2">
-                        <span class="text-xs font-bold">Fax #:</span>
+                        <span class="text-xs font-bold">Return Fax #:</span>
                         <span class="text-sm ml-2">{{ $fax ?: '—' }}</span>
                     </div>
                 </div>
@@ -113,13 +113,17 @@
                     </div>
                 </div>
 
-                {{-- Row 4: Employer Name (Please print) / Title --}}
+                {{-- Row 4: Employer Name (Please print) / Completed By / Title --}}
                 <div class="flex border-b border-black">
-                    <div class="w-1/2 p-2 border-r border-black">
+                    <div class="w-1/3 p-2 border-r border-black">
                         <span class="text-xs font-bold">Employer Name (Please print):</span>
                         <div class="border-b border-gray-400 mt-4 h-4"></div>
                     </div>
-                    <div class="w-1/2 p-2">
+                    <div class="w-1/3 p-2 border-r border-black">
+                        <span class="text-xs font-bold">Completed By:</span>
+                        <span class="text-sm ml-2">{{ $completedBy }}</span>
+                    </div>
+                    <div class="w-1/3 p-2">
                         <span class="text-xs font-bold">Title:</span>
                         <span class="text-sm ml-2">{{ $title }}</span>
                     </div>
