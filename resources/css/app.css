@@ -39,18 +39,44 @@
     --color-footer-link: #9dc3d9;
     --color-footer-link-hover: #d4e5ed;
 
-    /* Primary colors - Steel Blue palette based on #435a68 */
-    --color-primary-50: #f4f7f8;
-    --color-primary-100: #e4eaed;
-    --color-primary-200: #c9d5dc;
-    --color-primary-300: #a3b7c3;
-    --color-primary-400: #7593a4;
-    --color-primary-500: #5a7686;
-    --color-primary-600: #435a68;
-    --color-primary-700: #3a4d59;
-    --color-primary-800: #33424b;
-    --color-primary-900: #2d3940;
-    --color-primary-950: #1e262b;
+    /* Primary colors - Bermuda Gray palette based on #6a8fa6 */
+    --color-primary-50: #f5f8fa;
+    --color-primary-100: #e6eef2;
+    --color-primary-200: #c9dae3;
+    --color-primary-300: #a3c1d0;
+    --color-primary-400: #7da8bc;
+    --color-primary-500: #6a8fa6;
+    --color-primary-600: #5a7a8f;
+    --color-primary-700: #4a6575;
+    --color-primary-800: #3d5260;
+    --color-primary-900: #334450;
+    --color-primary-950: #232f38;
+
+    /* Accent colors - Buttercup for CTAs */
+    --color-accent-50: #fffbeb;
+    --color-accent-100: #fef3c7;
+    --color-accent-200: #fde68a;
+    --color-accent-300: #fcd34d;
+    --color-accent-400: #f5a524;
+    --color-accent-500: #d99000;
+    --color-accent-600: #b47600;
+    --color-accent-700: #8f5c00;
+    --color-accent-800: #724a00;
+    --color-accent-900: #5c3d00;
+    --color-accent-950: #3d2800;
+
+    /* Secondary colors - Glacier/Aqua Island */
+    --color-secondary-50: #f0f9fb;
+    --color-secondary-100: #d9f0f5;
+    --color-secondary-200: #a3d0dc;
+    --color-secondary-300: #87b4c4;
+    --color-secondary-400: #6a9eb0;
+    --color-secondary-500: #5a8a9c;
+    --color-secondary-600: #4a7484;
+    --color-secondary-700: #3d5f6c;
+    --color-secondary-800: #334e59;
+    --color-secondary-900: #2b4049;
+    --color-secondary-950: #1c2a30;
 
     /* Slate Colors for Section Headers */
     --color-slate-50: #f8fafc;
