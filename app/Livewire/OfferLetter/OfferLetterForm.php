@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\OfferLetter;
 
+use App\Models\OfferLetterSubmission;
 use App\Services\OfferLetterPdfService;
 use App\Services\PresetStorage;
 use Carbon\Carbon;
@@ -521,6 +522,14 @@ class OfferLetterForm extends Component
             'form_type' => 'offer-letter',
             'language' => $this->language,
             'created_at' => now(),
+        ]);
+
+        // Record analytics
+        OfferLetterSubmission::create([
+            'session_id' => session()->getId(),
+            'template_type' => $this->jobType,
+            'language' => $this->language,
+            'form_data' => $this->templateData,
         ]);
 
         $filename = 'OfferLetter_'.str_replace(' ', '_', $this->lastName).'_'.date('Y-m-d').'.pdf';

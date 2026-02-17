@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Livewire\Ejd;
 
 use App\Enums\JobLocation;
+use App\Models\EjdSubmission;
 use App\Models\Job;
+use App\Models\JobSelection;
 use App\Models\Task;
+use App\Models\TaskSelection;
 use App\Services\EjdPdfService;
 use App\Services\PresetStorage;
 use Illuminate\Contracts\View\View;
@@ -726,6 +729,20 @@ class EjdForm extends Component
             'language' => 'english',
             'created_at' => now(),
         ]);
+
+        // Record analytics
+        EjdSubmission::create([
+            'session_id' => session()->getId(),
+            'form_data' => $data,
+        ]);
+
+        foreach ($this->jobTitle as $jobId) {
+            JobSelection::record((int) $jobId);
+        }
+
+        foreach ($this->tasks as $taskId) {
+            TaskSelection::record((int) $taskId);
+        }
 
         // Sanitize job title: remove special chars except dashes, replace spaces with dashes
         $jobTitle = $this->customJobTitle ?: $this->jobTitleDisplay;
