@@ -1,5 +1,11 @@
 # EJD Application
 
+## Repository
+
+- **Git root:** `/var/www/vhosts/returntoworkwa.org/` (vhost root)
+- **Web root:** `httpdocs/`
+- **Remote:** `https://github.com/tyleratgage/jobwizard.git` (branch: `main`)
+
 Essential Job Description form generator for Washington State Department of Labor and Industries.
 
 ## Routes
